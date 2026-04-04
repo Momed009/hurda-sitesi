@@ -23,7 +23,19 @@ const WhatsAppIcon = (props: React.SVGProps<SVGSVGElement>) => (
 export default function WhatsAppButton({ phoneNumber }: { phoneNumber: string }) {
   if (!phoneNumber) return null;
 
-  const whatsappUrl = `https://wa.me/${phoneNumber.replace(/\D/g, '')}`;
+  let cleaned = phoneNumber.replace(/\D/g, '');
+  if (cleaned.startsWith('0')) {
+    cleaned = cleaned.substring(1);
+  }
+  if (cleaned.length === 10 && (cleaned.startsWith('5') || cleaned.startsWith('8'))) {
+    cleaned = '90' + cleaned;
+  } else if (cleaned.length === 12 && cleaned.startsWith('90')) {
+    // Zaten 90 ile başlıyor ve doğru uzunlukta
+  } else if (!cleaned.startsWith('90') && cleaned.length > 0) {
+    cleaned = '90' + cleaned;
+  }
+
+  const whatsappUrl = `https://wa.me/${cleaned}`;
 
   return (
     <div className="fixed bottom-6 right-6 z-50">
