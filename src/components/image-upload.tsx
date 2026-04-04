@@ -2,13 +2,14 @@
 
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Loader2, Upload, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Loader2, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { initializeFirebase } from '@/firebase';
+import { ref, uploadBytes, getDownloadURL } from 'firebase/storage';
 
 interface ImageUploadProps {
-  onUploadSuccess: (filename: string) => void;
+  onUploadSuccess: (urlOrFilename: string) => void;
 }
 
 export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
@@ -30,43 +31,48 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
       return;
     }
 
-    // Dosya boyutu kontrolü (Örn: 5MB)
-    if (file.size > 5 * 1024 * 1024) {
+    // Dosya boyutu kontrolü (10MB'a yükseltildi)
+    if (file.size > 10 * 1024 * 1024) {
       toast({
         variant: 'destructive',
         title: 'Dosya Çok Büyük!',
-        description: 'Lütfen 5MB\'dan küçük görseller yükleyin.',
+        description: 'Lütfen 10MB\'dan küçük görseller yükleyin.',
       });
       return;
     }
 
     setIsUploading(true);
-    const formData = new FormData();
-    formData.append('file', file);
-
+    
     try {
-      const response = await fetch('/api/upload', {
-        method: 'POST',
-        body: formData,
+      const { storage } = initializeFirebase();
+      
+      // Benzersiz dosya adı oluştur
+      const timestamp = Date.now();
+      const cleanName = file.name.replace(/\s+/g, '-').toLowerCase();
+      const fileName = `uploads/${timestamp}-${cleanName}`;
+      
+      const storageRef = ref(storage, fileName);
+      
+      // Doğrudan Firebase Storage'a yükle
+      const snapshot = await uploadBytes(storageRef, file);
+      
+      // Yüklenen dosyanın internet adresini (URL) al
+      const downloadURL = await getDownloadURL(snapshot.ref);
+
+      toast({
+        title: 'Başarılı!',
+        description: 'Görsel buluta yüklendi.',
       });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        toast({
-          title: 'Başarılı!',
-          description: 'Görsel yüklendi ve seçildi.',
-        });
-        onUploadSuccess(data.filename);
-      } else {
-        throw new Error(data.error || 'Yükleme başarısız.');
-      }
+      
+      // Form'a dosya adını değil, direkt internet adresini veriyoruz
+      onUploadSuccess(downloadURL);
+      
     } catch (error: any) {
       console.error('Upload error:', error);
       toast({
         variant: 'destructive',
         title: 'Yükleme Hatası!',
-        description: error.message || 'Görsel yüklenirken bir sorun oluştu.',
+        description: 'Bulut depolama sunucusuna erişilemedi. Lütfen internet bağlantınızı kontrol edin.',
       });
     } finally {
       setIsUploading(false);
@@ -101,7 +107,7 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
         ) : (
           <Upload className="w-4 h-4" />
         )}
-        {isUploading ? 'Yükleniyor...' : 'Galeriden / Dosyadan Yükle'}
+        {isUploading ? 'Buluta Yükleniyor...' : 'Galeriden / Dosyadan Yükle'}
       </Button>
     </div>
   );

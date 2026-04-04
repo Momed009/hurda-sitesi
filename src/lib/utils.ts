@@ -6,16 +6,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 // ... (existing code)
-export function getImagePath(path?: string): string {
-  if (!path || path === 'lutfen-gorsel-ekleyin') {
-    const seed = path || 'fallback';
-    return `https://picsum.photos/seed/${seed}/600/400`;
+export function getImagePath(url: string = '') {
+  if (!url) return '/placeholder-image.jpg';
+  
+  // Eğer tam bir URL ise (Firebase Storage veya dış link) direkt döndür
+  if (url.startsWith('http://') || url.startsWith('https://')) {
+    return url;
   }
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
-  }
-  // Assumes the path is a filename in the public/images directory
-  return `/images/${path}`;
+  
+  // Klasik yerel dosya ise public/images'dan oku
+  return `/images/${url}`;
 }
 
 export function formatWhatsAppNumber(phoneNumber: string): string {
