@@ -71,6 +71,18 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: 'www.kardeslermetalmalkara.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**.cloudinary.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'firebasestorage.googleapis.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.firebasestorage.app',
+      },
     ],
   },
 
