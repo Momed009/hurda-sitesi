@@ -11,7 +11,7 @@ import type { Product, Image as ImageType, SiteSetting } from '@/lib/types';
 import { findImageById, getFallbackImage } from '@/lib/placeholder-images';
 import Link from 'next/link';
 import { useDoc } from '@/firebase/firestore/use-doc';
-import { getImagePath } from '@/lib/utils';
+import { getImagePath, formatWhatsAppNumber } from '@/lib/utils';
 
 export default function ListingsPageClient() {
   const firestore = useFirestore();
@@ -34,7 +34,7 @@ export default function ListingsPageClient() {
   
   const isLoading = productsLoading || imagesLoading || settingsLoading;
   
-  const whatsappUrl = `https://wa.me/${siteSettingsData?.whatsappPhoneNumber?.replace(/\D/g, '')}`;
+  const whatsappUrl = `https://wa.me/${formatWhatsAppNumber(siteSettingsData?.whatsappPhoneNumber ?? '')}`;
 
   return (
     <div className="container py-16 lg:py-24">

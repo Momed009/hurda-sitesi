@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Phone, MapPin, Loader2, Instagram, Facebook, MessageCircle, Navigation } from 'lucide-react';
 import { useDoc, useCollection, useFirestore, useMemoFirebase } from '@/firebase';
 import { doc, collection } from 'firebase/firestore';
+import { formatWhatsAppNumber } from '@/lib/utils';
 import type { CompanyInfo, Image as ImageType, SiteSetting } from '@/lib/types';
 import { findImageById, getFallbackImage } from '@/lib/placeholder-images';
 import { getImagePath } from '@/lib/utils';
@@ -23,7 +24,7 @@ export default function AboutPageClient() {
   const { data: allImages, isLoading: imagesLoading } = useCollection<ImageType>(imagesQuery);
   
   const ownerImage = (companyInfo?.ownerImageId ? findImageById(companyInfo.ownerImageId, allImages) : null) ?? getFallbackImage(companyInfo?.ownerImageId || 'about-us-owner');
-  const whatsappUrl = `https://wa.me/${siteSettings?.whatsappPhoneNumber?.replace(/\D/g, '')}?text=Merhaba,%20hurda%20fiyatları%20hakkında%20bilgi%20almak%20istiyorum.`;
+  const whatsappUrl = `https://wa.me/${formatWhatsAppNumber(siteSettings?.whatsappPhoneNumber ?? '')}?text=Merhaba,%20hurda%20fiyatları%20hakkında%20bilgi%20almak%20istiyorum.`;
 
   const isLoading = infoLoading || imagesLoading || settingsLoading;
 

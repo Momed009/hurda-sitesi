@@ -10,7 +10,7 @@ import { ArrowRight, Truck, HardHat, Recycle, Layers, Car, Plug, Loader2, Shield
 import { useCollection, useFirestore, useMemoFirebase, useDoc } from '@/firebase';
 import { collection, query, orderBy, limit, where, doc } from 'firebase/firestore';
 import type { Service, Image as ImageType, Blog, SiteSetting, CompanyInfo } from '@/lib/types';
-import { getImagePath } from '@/lib/utils';
+import { getImagePath, formatWhatsAppNumber } from '@/lib/utils';
 import { BlogDetailDialog } from '@/components/blog-detail-dialog';
 
 const serviceIcons: { [key: string]: React.ReactNode } = {
@@ -65,7 +65,7 @@ export default function HomePageClient() {
   const isLoading = settingsLoading || infoLoading || servicesLoading || imagesLoading || postsLoading;
 
   const phoneUrl = `tel:${companyInfo?.contactPhoneNumber?.replace(/\D/g, '')}`;
-  const whatsappUrl = `https://wa.me/${siteSettings?.whatsappPhoneNumber?.replace(/\D/g, '')}?text=Merhaba, sitenizden ulaşıyorum.`;
+  const whatsappUrl = `https://wa.me/${formatWhatsAppNumber(siteSettings?.whatsappPhoneNumber ?? '')}?text=Merhaba, sitenizden ulaşıyorum.`;
   const mapUrl = companyInfo?.companyAddress
     ? `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(companyInfo.companyAddress)}`
     : '#';

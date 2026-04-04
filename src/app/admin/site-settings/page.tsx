@@ -19,56 +19,56 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 
 const formSchema = z.object({
   // Genel
-  siteName: z.string().min(3, 'Site adı zorunludur.'),
-  whatsappPhoneNumber: z.string().min(10, 'WhatsApp numarası zorunludur.'),
+  siteName: z.string().min(1, 'Site adı zorunludur.'),
+  whatsappPhoneNumber: z.string().min(1, 'WhatsApp numarası zorunludur.'),
   contactEmail: z.string().email('Geçerli bir e-posta adresi girin.').optional().or(z.literal('')),
   
   // Ana Sayfa
-  homepageHeroTitle: z.string().min(10, 'Ana sayfa başlığı zorunludur.'),
-  homepageHeroSubtitle: z.string().min(10, 'Ana sayfa alt başlığı zorunludur.'),
-  homepageHeroImageId: z.string().min(3, 'Ana sayfa görsel ID\'si zorunludur.'),
-  homepageServicesTitle: z.string().min(10, 'Hizmetler bölüm başlığı zorunludur.'),
-  homepageServicesSubtitle: z.string().min(10, 'Hizmetler bölüm alt başlığı zorunludur.'),
-  homepageWhyUsTitle: z.string().min(10, 'Neden Biz bölüm başlığı zorunludur.'),
-  homepageWhyUsSubtitle: z.string().min(10, 'Neden Biz bölüm alt başlığı zorunludur.'),
-  whyUsItem1Title: z.string().min(3, 'Madde 1 başlığı zorunludur.'),
-  whyUsItem1Text: z.string().min(10, 'Madde 1 metni zorunludur.'),
-  whyUsItem2Title: z.string().min(3, 'Madde 2 başlığı zorunludur.'),
-  whyUsItem2Text: z.string().min(10, 'Madde 2 metni zorunludur.'),
-  whyUsItem3Title: z.string().min(3, 'Madde 3 başlığı zorunludur.'),
-  whyUsItem3Text: z.string().min(10, 'Madde 3 metni zorunludur.'),
+  homepageHeroTitle: z.string().optional().or(z.literal('')),
+  homepageHeroSubtitle: z.string().optional().or(z.literal('')),
+  homepageHeroImageId: z.string().optional().or(z.literal('')),
+  homepageServicesTitle: z.string().optional().or(z.literal('')),
+  homepageServicesSubtitle: z.string().optional().or(z.literal('')),
+  homepageWhyUsTitle: z.string().optional().or(z.literal('')),
+  homepageWhyUsSubtitle: z.string().optional().or(z.literal('')),
+  whyUsItem1Title: z.string().optional().or(z.literal('')),
+  whyUsItem1Text: z.string().optional().or(z.literal('')),
+  whyUsItem2Title: z.string().optional().or(z.literal('')),
+  whyUsItem2Text: z.string().optional().or(z.literal('')),
+  whyUsItem3Title: z.string().optional().or(z.literal('')),
+  whyUsItem3Text: z.string().optional().or(z.literal('')),
   
   // Hizmetler Sayfası
-  servicesPageTitle: z.string().min(10, 'Hizmetler sayfası başlığı zorunludur.'),
-  servicesPageSubtitle: z.string().min(10, 'Hizmetler sayfası alt başlığı zorunludur.'),
-  servicesIndustrialTitle: z.string().min(10, 'Sanayi bölümü başlığı zorunludur.'),
-  servicesIndustrialText: z.string().min(10, 'Sanayi bölümü metni zorunludur.'),
-  servicesIndustrialImageId: z.string().min(3, 'Sanayi bölümü görsel ID\'si zorunludur.'),
-  servicesElectronicsTitle: z.string().min(10, 'Elektronik bölümü başlığı zorunludur.'),
-  servicesElectronicsText: z.string().min(10, 'Elektronik bölümü metni zorunludur.'),
-  servicesElectronicsSubtitle: z.string().min(10, 'Elektronik alt bölüm başlığı zorunludur.'),
-  servicesElectronicsSubtext: z.string().min(10, 'Elektronik alt bölüm metni zorunludur.'),
-  servicesElectronicsImageId: z.string().min(3, 'Elektronik bölümü görsel ID\'si zorunludur.'),
-  servicesWholesaleTitle: z.string().min(10, 'Toptan alım bölümü başlığı zorunludur.'),
-  servicesWholesaleText: z.string().min(10, 'Toptan alım bölümü metni zorunludur.'),
+  servicesPageTitle: z.string().optional().or(z.literal('')),
+  servicesPageSubtitle: z.string().optional().or(z.literal('')),
+  servicesIndustrialTitle: z.string().optional().or(z.literal('')),
+  servicesIndustrialText: z.string().optional().or(z.literal('')),
+  servicesIndustrialImageId: z.string().optional().or(z.literal('')),
+  servicesElectronicsTitle: z.string().optional().or(z.literal('')),
+  servicesElectronicsText: z.string().optional().or(z.literal('')),
+  servicesElectronicsSubtitle: z.string().optional().or(z.literal('')),
+  servicesElectronicsSubtext: z.string().optional().or(z.literal('')),
+  servicesElectronicsImageId: z.string().optional().or(z.literal('')),
+  servicesWholesaleTitle: z.string().optional().or(z.literal('')),
+  servicesWholesaleText: z.string().optional().or(z.literal('')),
 
   // İlanlar Sayfası
-  listingsPageTitle: z.string().min(5, 'İlanlar sayfası başlığı zorunludur.'),
-  listingsPageSubtitle: z.string().min(10, 'İlanlar sayfası alt başlığı zorunludur.'),
+  listingsPageTitle: z.string().optional().or(z.literal('')),
+  listingsPageSubtitle: z.string().optional().or(z.literal('')),
 
   // Blog Sayfası
-  blogPageTitle: z.string().min(3, 'Blog sayfası başlığı zorunludur.'),
-  blogPageSubtitle: z.string().min(10, 'Blog sayfası alt başlığı zorunludur.'),
+  blogPageTitle: z.string().optional().or(z.literal('')),
+  blogPageSubtitle: z.string().optional().or(z.literal('')),
 
   // İletişim Sayfası
-  aboutPageTitle: z.string().min(10, 'İletişim sayfası başlığı zorunludur.'),
-  aboutPageSubtitle: z.string().min(10, 'İletişim sayfası alt başlığı zorunludur.'),
-  aboutWhatsappTitle: z.string().min(10, 'WhatsApp bölümü başlığı zorunludur.'),
-  aboutWhatsappText: z.string().min(10, 'WhatsApp bölümü metni zorunludur.'),
-  aboutServiceAreasTitle: z.string().min(10, 'Hizmet Bölgeleri bölümü başlığı zorunludur.'),
-  aboutServiceAreasText: z.string().min(10, 'Hizmet Bölgeleri bölümü metni zorunludur.'),
-  aboutServiceAreasSubtitle: z.string().min(10, 'Adresten alım bölümü başlığı zorunludur.'),
-  aboutServiceAreasSubtext: z.string().min(10, 'Adresten alım bölümü metni zorunludur.'),
+  aboutPageTitle: z.string().optional().or(z.literal('')),
+  aboutPageSubtitle: z.string().optional().or(z.literal('')),
+  aboutWhatsappTitle: z.string().optional().or(z.literal('')),
+  aboutWhatsappText: z.string().optional().or(z.literal('')),
+  aboutServiceAreasTitle: z.string().optional().or(z.literal('')),
+  aboutServiceAreasText: z.string().optional().or(z.literal('')),
+  aboutServiceAreasSubtitle: z.string().optional().or(z.literal('')),
+  aboutServiceAreasSubtext: z.string().optional().or(z.literal('')),
 });
 
 type SiteSettingsFormValues = z.infer<typeof formSchema>;
@@ -130,7 +130,14 @@ export default function SiteSettingsPage() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+      <form onSubmit={form.handleSubmit(handleSubmit, (errors) => {
+        console.log('Form hataları:', errors);
+        toast({
+          variant: 'destructive',
+          title: 'Form Hatası!',
+          description: 'Lütfen zorunlulu alanları kontrol edin. Bazı alanlar eksik veya hatalı.',
+        });
+      })} className="space-y-6">
         <div className="flex items-center">
           <h1 className="text-lg font-semibold md:text-2xl">Site Ayarları</h1>
         </div>
