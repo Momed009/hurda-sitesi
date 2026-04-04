@@ -1,0 +1,494 @@
+{
+  "entities": {
+    "SiteSetting": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "SiteSetting",
+      "type": "object",
+      "description": "Global configuration settings for the entire website, managed through the admin panel.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the SiteSetting entity. (PK)"
+        },
+        "siteName": {
+          "type": "string",
+          "description": "The name of the website, displayed in headers, footers, and browser titles."
+        },
+        "siteLogoImageId": {
+          "type": "string",
+          "description": "Reference to the Image entity for the website's logo. (Relationship: SiteSetting 1:1 Image)"
+        },
+        "whatsappPhoneNumber": {
+          "type": "string",
+          "description": "The phone number used for the dynamic WhatsApp contact button across the site. Should include country code if necessary."
+        },
+        "contactEmail": {
+          "type": "string",
+          "description": "General contact email address for the website, if applicable.",
+          "format": "email"
+        },
+        "homepageHeroTitle": {
+          "type": "string",
+          "description": "The main H1 title for the homepage hero section."
+        },
+        "homepageHeroSubtitle": {
+          "type": "string",
+          "description": "The subtitle paragraph for the homepage hero section."
+        },
+        "homepageHeroImageId": {
+          "type": "string",
+          "description": "The ID of the image used for the hero section background."
+        },
+        "homepageServicesTitle": {
+          "type": "string",
+          "description": "The title for the services section on the homepage."
+        },
+        "homepageServicesSubtitle": {
+          "type": "string",
+          "description": "The subtitle for the services section on the homepage."
+        },
+        "homepageWhyUsTitle": {
+          "type": "string",
+          "description": "The title for the 'Why Us?' section on the homepage."
+        },
+        "homepageWhyUsSubtitle": {
+          "type": "string",
+          "description": "The subtitle for the 'Why Us?' section on the homepage."
+        },
+        "whyUsItem1Title": {
+          "type": "string",
+          "description": "Title for the first item in the 'Why Us?' section."
+        },
+        "whyUsItem1Text": {
+          "type": "string",
+          "description": "Text for the first item in the 'Why Us?' section."
+        },
+        "whyUsItem2Title": {
+          "type": "string",
+          "description": "Title for the second item in the 'Why Us?' section."
+        },
+        "whyUsItem2Text": {
+          "type": "string",
+          "description": "Text for the second item in the 'Why Us?' section."
+        },
+        "whyUsItem3Title": {
+          "type": "string",
+          "description": "Title for the third item in the 'Why Us?' section."
+        },
+        "whyUsItem3Text": {
+          "type": "string",
+          "description": "Text for the third item in the 'Why Us?' section."
+        },
+        "servicesPageTitle": {
+          "type": "string",
+          "description": "The main H1 title for the services page."
+        },
+        "servicesPageSubtitle": {
+          "type": "string",
+          "description": "The subtitle paragraph for the services page."
+        },
+        "servicesIndustrialTitle": {
+          "type": "string",
+          "description": "Title for the industrial scrap section on the services page."
+        },
+        "servicesIndustrialText": {
+          "type": "string",
+          "description": "Text for the industrial scrap section on the services page."
+        },
+        "servicesIndustrialImageId": {
+          "type": "string",
+          "description": "Image ID for the industrial scrap section on the services page."
+        },
+        "servicesElectronicsTitle": {
+          "type": "string",
+          "description": "Title for the electronics scrap section on the services page."
+        },
+        "servicesElectronicsText": {
+          "type": "string",
+          "description": "Main text for the electronics scrap section on the services page."
+        },
+        "servicesElectronicsSubtitle": {
+          "type": "string",
+          "description": "Subtitle for the old appliances part of the electronics section."
+        },
+        "servicesElectronicsSubtext": {
+          "type": "string",
+          "description": "Text for the old appliances part of the electronics section."
+        },
+        "servicesElectronicsImageId": {
+          "type": "string",
+          "description": "Image ID for the electronics scrap section on the services page."
+        },
+        "servicesWholesaleTitle": {
+          "type": "string",
+          "description": "Title for the wholesale/weighing section on the services page."
+        },
+        "servicesWholesaleText": {
+          "type": "string",
+          "description": "Text for the wholesale/weighing section on the services page."
+        }
+      },
+      "required": [
+        "id",
+        "siteName",
+        "whatsappPhoneNumber",
+        "homepageHeroTitle"
+      ]
+    },
+    "CompanyInfo": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "CompanyInfo",
+      "type": "object",
+      "description": "Information about the company and its owner, primarily for the 'About Us' page and editable via the admin panel.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the CompanyInfo entity. (PK)"
+        },
+        "ownerFullName": {
+          "type": "string",
+          "description": "The full name of the business owner."
+        },
+        "ownerImageId": {
+          "type": "string",
+          "description": "Reference to the Image entity for the business owner's photo. (Relationship: CompanyInfo 1:1 Image)"
+        },
+        "contactPhoneNumber": {
+          "type": "string",
+          "description": "The primary contact phone number for the company or owner, separate from the site-wide WhatsApp number."
+        },
+        "companyAddress": {
+          "type": "string",
+          "description": "The full physical address of the company's business location. Updates here should reflect on the 'About Us' page map."
+        },
+        "mapEmbedUrl": {
+          "type": "string",
+          "description": "The embeddable URL for a map (e.g., Google Maps) showing the company's location on the 'About Us' page. This can be updated by the admin.",
+          "format": "uri"
+        },
+        "aboutUsContent": {
+          "type": "string",
+          "description": "The main content or narrative text for the 'About Us' page."
+        },
+        "instagramUrl": {
+          "type": "string",
+          "description": "The full URL for the company's Instagram profile.",
+          "format": "uri"
+        },
+        "facebookUrl": {
+          "type": "string",
+          "description": "The full URL for the company's Facebook profile.",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "id",
+        "ownerFullName",
+        "ownerImageId",
+        "contactPhoneNumber",
+        "companyAddress",
+        "mapEmbedUrl",
+        "aboutUsContent"
+      ]
+    },
+    "Service": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Service",
+      "type": "object",
+      "description": "Details about a specific service offered by the company, including descriptions and associated imagery.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Service entity. (PK)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title or name of the service."
+        },
+        "description": {
+          "type": "string",
+          "description": "A detailed description of what the service entails."
+        },
+        "imageIds": {
+          "type": "array",
+          "description": "An array of references to Image entities associated with this service, allowing multiple photos per service. (Relationship: Service 1:N Image)",
+          "items": {
+            "type": "string"
+          }
+        },
+        "displayOrder": {
+          "type": "number",
+          "description": "A numerical value indicating the order in which this service should be displayed on the services page."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "imageIds",
+        "displayOrder"
+      ]
+    },
+    "Product": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Product",
+      "type": "object",
+      "description": "A product available for sale, such as a used refrigerator or other scrap items.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Product entity. (PK)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the product."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of the product."
+        },
+        "price": {
+          "type": "number",
+          "description": "Price of the product in TL."
+        },
+        "stock": {
+          "type": "number",
+          "description": "How many units are in stock."
+        },
+        "imageId": {
+          "type": "string",
+          "description": "Reference to the Image entity for the product's photo."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The date the product was listed."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "price",
+        "stock",
+        "imageId",
+        "createdAt"
+      ]
+    },
+    "Blog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Blog",
+      "type": "object",
+      "description": "A blog post containing content related to scrap and recycling, optimized for SEO and editable through the admin panel.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Blog entity. (PK)"
+        },
+        "title": {
+          "type": "string",
+          "description": "The title of the blog post."
+        },
+        "slug": {
+          "type": "string",
+          "description": "A URL-friendly version of the title, used for clean URLs."
+        },
+        "content": {
+          "type": "string",
+          "description": "The full rich-text content of the blog post, possibly in HTML or Markdown format."
+        },
+        "publishDate": {
+          "type": "string",
+          "description": "The date and time when the blog post was published.",
+          "format": "date-time"
+        },
+        "author": {
+          "type": "string",
+          "description": "The author of the blog post (e.g., 'Atık Rehber Ekibi')."
+        },
+        "metaDescription": {
+          "type": "string",
+          "description": "A concise summary of the blog post content, used for SEO meta tags."
+        },
+        "keywords": {
+          "type": "array",
+          "description": "An array of keywords relevant to the blog post, used for SEO and content discovery. Can be researched and generated by an AI assistant.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "thumbnailImageId": {
+          "type": "string",
+          "description": "Reference to the Image entity used as the thumbnail for this blog post. (Relationship: Blog 1:1 Image)"
+        },
+        "isFeaturedOnHomepage": {
+          "type": "boolean",
+          "description": "A flag indicating if this blog post should be featured on the website's homepage (up to 3 posts)."
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "slug",
+        "content",
+        "publishDate",
+        "author",
+        "metaDescription",
+        "keywords",
+        "thumbnailImageId",
+        "isFeaturedOnHomepage"
+      ]
+    },
+    "Image": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Image",
+      "type": "object",
+      "description": "A centralized entity for managing all images uploaded to the website, facilitating reuse and administration.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the Image entity. (PK)"
+        },
+        "url": {
+          "type": "string",
+          "description": "The public URL where the image file is hosted.",
+          "format": "uri"
+        },
+        "altText": {
+          "type": "string",
+          "description": "Alternative text for the image, important for accessibility and SEO."
+        },
+        "caption": {
+          "type": "string",
+          "description": "An optional caption or short description for the image, displayed below it."
+        },
+        "uploadDate": {
+          "type": "string",
+          "description": "The date and time when the image was uploaded.",
+          "format": "date-time"
+        },
+        "usageContext": {
+          "type": "string",
+          "description": "A category or description indicating where and how this image is typically used (e.g., 'Logo', 'Blog Thumbnail', 'Service Gallery', 'About Us Photo')."
+        }
+      },
+      "required": [
+        "id",
+        "url",
+        "altText",
+        "uploadDate",
+        "usageContext"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/siteSettings/{settingId}",
+        "definition": {
+          "entityName": "SiteSetting",
+          "schema": {
+            "$ref": "#/backend/entities/SiteSetting"
+          },
+          "description": "Stores global website configuration settings. Intended to be a single document (e.g., 'main' or 'global' as 'settingId'). Publicly readable, admin-writeable. Authorization for write access relies on the existence of the user's UID in the '/roles_admin' collection."
+        }
+      },
+      {
+        "path": "/companyInfo/{infoId}",
+        "definition": {
+          "entityName": "CompanyInfo",
+          "schema": {
+            "$ref": "#/backend/entities/CompanyInfo"
+          },
+          "description": "Contains company and owner information for the 'About Us' page. Intended to be a single document (e.g., 'main' or 'global' as 'infoId'). Publicly readable, admin-writeable. Authorization for write access relies on the existence of the user's UID in the '/roles_admin' collection."
+        }
+      },
+      {
+        "path": "/services/{serviceId}",
+        "definition": {
+          "entityName": "Service",
+          "schema": {
+            "$ref": "#/backend/entities/Service"
+          },
+          "description": "Collection of services offered by the company. Publicly readable, admin-writeable. Authorization for write access relies on the existence of the user's UID in the '/roles_admin' collection.",
+          "params": [
+            {
+              "name": "serviceId",
+              "description": "Unique identifier for a specific service."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/products/{productId}",
+        "definition": {
+          "entityName": "Product",
+          "schema": {
+            "$ref": "#/backend/entities/Product"
+          },
+          "description": "Collection of products available for sale. Publicly readable, admin-writeable. Authorization for write access relies on the existence of the user's UID in the '/roles_admin' collection.",
+          "params": [
+            {
+              "name": "productId",
+              "description": "Unique identifier for a specific product."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/blogs/{blogId}",
+        "definition": {
+          "entityName": "Blog",
+          "schema": {
+            "$ref": "#/backend/entities/Blog"
+          },
+          "description": "Collection of blog posts. Publicly readable, admin-writeable. Authorization for write access relies on the existence of the user's UID in the '/roles_admin' collection.",
+          "params": [
+            {
+              "name": "blogId",
+              "description": "Unique identifier for a specific blog post."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/images/{imageId}",
+        "definition": {
+          "entityName": "Image",
+          "schema": {
+            "$ref": "#/backend/entities/Image"
+          },
+          "description": "Centralized collection for all images. By removing the function-based rule structure and reverting to direct rule definitions, we force a hard redeployment of the security configuration. This should resolve any persistent caching or deployment issues that were causing the 'Missing or insufficient permissions' error, effectively resetting the security state to a known-good configuration.",
+          "params": [
+            {
+              "name": "imageId",
+              "description": "Unique identifier for a specific image."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/roles_admin/{adminUid}",
+        "definition": {
+          "entityName": "AdminRole",
+          "schema": {
+            "$ref": "#/backend/entities/User"
+          },
+          "description": "Dedicated collection for defining administrators. The document ID is the user's unique Firebase Authentication UID. The mere existence of a document at this path signifies that the corresponding user is an administrator. This collection is crucial for Authorization Independence.",
+          "params": [
+            {
+              "name": "adminUid",
+              "description": "The Firebase Authentication UID of a user designated as an administrator."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to be highly secure, scalable, and debuggable by strictly adhering to the core design principles. All publicly accessible content (Site Settings, Company Information, Services, Products, Blog Posts, and Images) resides in top-level collections. This ensures that read operations for regular users are straightforward and do not require any authorization checks, directly supporting Query-Based Authorization Patterns (QAPs) as rules are not used as filters.\n\nAuthorization for administration is managed via a dedicated 'roles_admin' collection. An administrator's UID will exist as a document ID within this collection (e.g., /roles_admin/{adminUid}). This approach ensures **Authorization Independence** because write access to any managed content collection (e.g., /siteSettings, /blogs, /images) is granted by a simple, atomic `get()` call to check for the existence of `request.auth.uid` in the `/roles_admin` collection. This explicit role-based access avoids complex hierarchical dependencies or reliance on parent document attributes, which can break atomic operations and make rules difficult to debug. This design centralizes admin role management and makes the authorization intent for all write operations clear and easy to audit.\n\nAll documents within a given collection share a homogeneous security posture (publicly readable, admin-writeable), simplifying security rules significantly and preventing QAP violations. The structure also employs clear and descriptive path parameters and entity names for enhanced debuggability and maintainability."
+  }
+}

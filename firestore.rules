@@ -1,0 +1,57 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Function to check if the user is an administrator
+    function isAdmin() {
+      // Allow the master account automatically, or check if they are in the roles_admin collection
+      return (request.auth != null && request.auth.token.email == 'temur@atikrehber.com') || 
+             exists(/databases/$(database)/documents/roles_admin/$(request.auth.uid));
+    }
+
+    // --- Publicly Readable Collections ---
+
+    match /siteSettings/{settingId} {
+      allow get, list: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /companyInfo/{infoId} {
+      allow get, list: if true;
+      allow write: if isAdmin();
+    }
+    
+    match /services/{serviceId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /products/{productId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    match /blogs/{blogId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /portfolio/{portfolioId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    match /images/{imageId} {
+      allow get, list: if true;
+      allow create, update, delete: if isAdmin();
+    }
+    
+    // --- Admin-only Collection ---
+
+    match /roles_admin/{adminUid} {
+      // Admins can manage other admins
+      allow read, write: if isAdmin();
+    }
+  }
+}
