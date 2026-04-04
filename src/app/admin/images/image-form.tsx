@@ -29,6 +29,7 @@ import {
 } from '@/components/ui/dialog';
 import { Loader2 } from 'lucide-react';
 import { getImagePath } from '@/lib/utils';
+import { LocalImagePicker } from '@/components/local-image-picker';
 
 const formSchema = z.object({
   url: z.string().min(3, { message: 'URL veya dosya adı girmelisiniz.' }),
@@ -95,7 +96,10 @@ export function ImageForm({ isOpen, onOpenChange, initialData, onSubmit, isSubmi
                   <FormItem>
                     <FormLabel>Görsel URL / Dosya Adı</FormLabel>
                     <FormControl>
-                      <Input placeholder="https://... veya ornek-gorsel.jpg" {...field} />
+                      <div className="flex flex-col gap-2">
+                        <Input placeholder="https://... veya ornek-gorsel.jpg" {...field} />
+                        <LocalImagePicker onSelect={(filename) => form.setValue('url', filename)} />
+                      </div>
                     </FormControl>
                     <FormDescription>
                       Tam bir URL yapıştırın veya projenizin `public/images` klasörüne eklediğiniz bir görselin dosya adını yazın.
