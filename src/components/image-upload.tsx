@@ -74,32 +74,46 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
     setProgress(0);
     
     try {
-      // 1. ADIM: GÖRSELİ SIKILŞTIR (Hızlandırma Mekanizması)
       const compressedBlob = await compressImage(file);
-      
       const { storage } = initializeFirebase();
       const timestamp = Date.now();
       const cleanName = file.name.replace(/\s+/g, '-').toLowerCase().split('.')[0];
-      const fileName = `uploads/${timestamp}-${cleanName}.webp`; // Hepsi WebP olacak (Yüksek Verim)
+      const fileName = `uploads/${timestamp}-${cleanName}.webp`; 
       
       const storageRef = ref(storage, fileName);
-      
-      // 2. ADIM: YÜKLEMEYİ BAŞLAT (Resumable - İlerleme Takibi İçin)
       const uploadTask = uploadBytesResumable(storageRef, compressedBlob);
+
+      // 30 Saniyelik Zaman Aşımı Koruması
+      const timeout = setTimeout(() => {
+        if (isUploading) {
+            uploadTask.cancel();
+            setIsUploading(false);
+            toast({
+                variant: 'destructive',
+                title: 'Bağlantı Zaman Aşımı!',
+                description: 'Yükleme başlatılamadı. Lütfen Firebase Storage "Rules" kısmından "allow read, write: if true;" kuralının aktif olduğunu doğrulayın.',
+            });
+        }
+      }, 45000); // 45 Saniyeye çıkardım garantili olması için
 
       uploadTask.on(
         'state_changed',
         (snapshot) => {
-          // İLERLEME HESAPLA (%)
           const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
           setProgress(percent);
         },
-        (error) => {
-          console.error('Upload task error:', error);
-          throw error;
+        (error: any) => {
+          clearTimeout(timeout);
+          console.error('Upload task error detail:', error);
+          setIsUploading(false);
+          toast({
+            variant: 'destructive',
+            title: 'Yükleme Başarısız!',
+            description: `Hata: ${error.code || error.message}. Lütfen Storage izinlerini (Rules) kontrol edin!`,
+          });
         },
         async () => {
-          // YÜKLEME BİTTİ
+          clearTimeout(timeout);
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           toast({
             title: 'Tamamlandı!',
@@ -112,13 +126,13 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
       );
       
     } catch (error: any) {
-      console.error('Upload error:', error);
+      console.error('Outer upload error:', error);
+      setIsUploading(false);
       toast({
         variant: 'destructive',
-        title: 'Yükleme Hatası!',
-        description: 'Bulut depolama sunucusuna erişilemedi.',
+        title: 'Hazırlık Hatası!',
+        description: 'Görsel işlenirken bir sorun oluştu. Lütfen tekrar deneyin.',
       });
-      setIsUploading(false);
     } finally {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
