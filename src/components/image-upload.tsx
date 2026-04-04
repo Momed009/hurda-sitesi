@@ -2,14 +2,12 @@
 
 import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, Upload, CheckCircle2 } from 'lucide-react';
+import { Loader2, Upload } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { initializeFirebase } from '@/firebase';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { Progress } from '@/components/ui/progress';
 
 interface ImageUploadProps {
-  onUploadSuccess: (url: string) => void;
+  onUploadSuccess: (urlOrFilename: string) => void;
 }
 
 export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
@@ -18,44 +16,9 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
-  // Görseli sıkıştırmak için yardımcı fonksiyon (Browser-side)
-  const compressImage = (file: File): Promise<Blob> => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = (event) => {
-        const img = new Image();
-        img.src = event.target?.result as string;
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const MAX_WIDTH = 1600; // Maksimum genişlik
-          let width = img.width;
-          let height = img.height;
-
-          if (width > MAX_WIDTH) {
-            height *= MAX_WIDTH / width;
-            width = MAX_WIDTH;
-          }
-
-          canvas.width = width;
-          canvas.height = height;
-          const ctx = canvas.getContext('2d');
-          ctx?.drawImage(img, 0, 0, width, height);
-
-          // Kaliteyi %80 yaparak WebP olarak dışa aktar (Hız ve Kalite Dengesi)
-          canvas.toBlob(
-            (blob) => {
-              if (blob) resolve(blob);
-              else reject(new Error('Sıkıştırma hatası!'));
-            },
-            'image/webp',
-            0.8
-          );
-        };
-      };
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  // Cloudinary Bilgileri (Unsigned Upload için)
+  const CLOUD_NAME = 'dyxjsdus1';
+  const UPLOAD_PRESET = 'temur-preset';
 
   const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -73,66 +36,59 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
     setIsUploading(true);
     setProgress(0);
     
+    // Cloudinary için FormData hazırla
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', UPLOAD_PRESET);
+
     try {
-      const compressedBlob = await compressImage(file);
-      const { storage } = initializeFirebase();
-      const timestamp = Date.now();
-      const cleanName = file.name.replace(/\s+/g, '-').toLowerCase().split('.')[0];
-      const fileName = `uploads/${timestamp}-${cleanName}.webp`; 
+      // XMLHttpRequest kullanarak yükleme ilerlemesini takibi (%)
+      const xhr = new XMLHttpRequest();
       
-      const storageRef = ref(storage, fileName);
-      const uploadTask = uploadBytesResumable(storageRef, compressedBlob);
+      xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`, true);
 
-      // 30 Saniyelik Zaman Aşımı Koruması
-      const timeout = setTimeout(() => {
-        if (isUploading) {
-            uploadTask.cancel();
-            setIsUploading(false);
-            toast({
-                variant: 'destructive',
-                title: 'Bağlantı Zaman Aşımı!',
-                description: 'Yükleme başlatılamadı. Lütfen Firebase Storage "Rules" kısmından "allow read, write: if true;" kuralının aktif olduğunu doğrulayın.',
-            });
+      // İlerleme Takibi
+      xhr.upload.onprogress = (e) => {
+        if (e.lengthComputable) {
+          const percentComplete = Math.round((e.loaded / e.total) * 100);
+          setProgress(percentComplete);
         }
-      }, 45000); // 45 Saniyeye çıkardım garantili olması için
+      };
 
-      uploadTask.on(
-        'state_changed',
-        (snapshot) => {
-          const percent = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
-          setProgress(percent);
-        },
-        (error: any) => {
-          clearTimeout(timeout);
-          console.error('Upload task error detail:', error);
-          setIsUploading(false);
+      xhr.onload = () => {
+        if (xhr.status === 200) {
+          const response = JSON.parse(xhr.responseText);
+          const downloadURL = response.secure_url;
+          
           toast({
-            variant: 'destructive',
-            title: 'Yükleme Başarısız!',
-            description: `Hata: ${error.code || error.message}. Lütfen Storage izinlerini (Rules) kontrol edin!`,
+            title: 'Başarılı!',
+            description: 'Görsel Cloudinary bulutuna yüklendi.',
           });
-        },
-        async () => {
-          clearTimeout(timeout);
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          toast({
-            title: 'Tamamlandı!',
-            description: 'Görsel optimize edildi ve yüklendi.',
-          });
+          
           onUploadSuccess(downloadURL);
           setIsUploading(false);
           setProgress(0);
+        } else {
+          console.error('Cloudinary error response:', xhr.responseText);
+          throw new Error('Yükleme başarısız oldu.');
         }
-      );
+      };
+
+      xhr.onerror = () => {
+        throw new Error('Ağ hatası oluştu.');
+      };
+
+      xhr.send(formData);
       
     } catch (error: any) {
-      console.error('Outer upload error:', error);
-      setIsUploading(false);
+      console.error('Cloudinary upload error:', error);
       toast({
         variant: 'destructive',
-        title: 'Hazırlık Hatası!',
-        description: 'Görsel işlenirken bir sorun oluştu. Lütfen tekrar deneyin.',
+        title: 'Yükleme Hatası!',
+        description: 'Bulut depolama sunucusuna erişilemedi. Lütfen internet bağlantınızı kontrol edin.',
       });
+      setIsUploading(false);
+      setProgress(0);
     } finally {
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
@@ -159,17 +115,17 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
           variant="secondary" 
           disabled={isUploading} 
           onClick={triggerFileInput}
-          className="w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 relative overflow-hidden"
+          className="w-full flex items-center justify-center gap-2 bg-primary/10 hover:bg-primary/20 text-primary border-primary/20 relative overflow-hidden transition-all active:scale-95"
         >
           {isUploading ? (
             <div className="flex items-center gap-2">
                 <Loader2 className="w-4 h-4 animate-spin" />
-                <span>Yükleniyor: %{progress}</span>
+                <span>Buluta Uçuyor: %{progress}</span>
             </div>
           ) : (
             <>
                 <Upload className="w-4 h-4" />
-                <span>Galeriden / Dosyadan Yükle</span>
+                <span>Hızlı Galeri Yüklemesi</span>
             </>
           )}
         </Button>
@@ -178,7 +134,7 @@ export function ImageUpload({ onUploadSuccess }: ImageUploadProps) {
             <div className="space-y-1">
                 <Progress value={progress} className="h-2" />
                 <p className="text-[10px] text-center text-muted-foreground animate-pulse">
-                    Görsel kalitesi optimize ediliyor ve buluta gönderiliyor...
+                    Cloudinary CDN üzerinden optimize ediliyor...
                 </p>
             </div>
         )}
