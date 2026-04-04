@@ -9,6 +9,7 @@ import type { Image } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 import {
   Form,
   FormControl,
@@ -30,6 +31,7 @@ import {
 import { Loader2 } from 'lucide-react';
 import { getImagePath } from '@/lib/utils';
 import { LocalImagePicker } from '@/components/local-image-picker';
+import { ImageUpload } from '@/components/image-upload';
 
 const formSchema = z.object({
   url: z.string().min(3, { message: 'URL veya dosya adı girmelisiniz.' }),
@@ -96,13 +98,23 @@ export function ImageForm({ isOpen, onOpenChange, initialData, onSubmit, isSubmi
                   <FormItem>
                     <FormLabel>Görsel URL / Dosya Adı</FormLabel>
                     <FormControl>
-                      <div className="flex flex-col gap-2">
-                        <Input placeholder="https://... veya ornek-gorsel.jpg" {...field} />
-                        <LocalImagePicker onSelect={(filename) => form.setValue('url', filename)} />
+                      <div className="flex flex-col gap-3">
+                        <div className="flex flex-col gap-2 p-3 border rounded-lg bg-muted/30">
+                            <Label className="text-xs font-semibold uppercase text-muted-foreground">1. Görseli Seç veya Yükle</Label>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                <LocalImagePicker onSelect={(filename) => form.setValue('url', filename)} />
+                                <ImageUpload onUploadSuccess={(filename) => form.setValue('url', filename)} />
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col gap-2 p-3 border rounded-lg bg-muted/30">
+                             <Label className="text-xs font-semibold uppercase text-muted-foreground">2. Dosya Adı / URL (Otomatik Dolar)</Label>
+                             <Input placeholder="https://... veya ornek-gorsel.jpg" {...field} />
+                        </div>
                       </div>
                     </FormControl>
                     <FormDescription>
-                      Tam bir URL yapıştırın veya projenizin `public/images` klasörüne eklediğiniz bir görselin dosya adını yazın.
+                      İster klasörden seçin, ister galeriden yeni bir fotoğraf yükleyin. Dosya adı otomatik olarak kutucuğa dolacaktır.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
