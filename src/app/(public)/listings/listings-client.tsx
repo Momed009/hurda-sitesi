@@ -86,11 +86,18 @@ export default function ListingsPageClient() {
                         </div>
                     </CardContent>
                     <CardFooter className="flex gap-2">
-                       <Button asChild className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white" disabled={product.stock <= 0}>
-                         <Link href={whatsappUrl} target="_blank">
-                           <ShoppingCart className="mr-2" /> WhatsApp
-                         </Link>
-                       </Button>
+                      {(() => {
+                        const message = `Merhaba, ${product.name} (${product.price.toLocaleString('tr-TR')} TL) ürünü hakkında bilgi almak istiyorum.`;
+                        const productWhatsappUrl = `https://wa.me/${formatWhatsAppNumber(siteSettingsData?.whatsappPhoneNumber ?? '')}?text=${encodeURIComponent(message)}`;
+                        
+                        return (
+                          <Button asChild className="w-full bg-[#25D366] hover:bg-[#128C7E] text-white transition-all active:scale-95" disabled={product.stock <= 0}>
+                            <Link href={productWhatsappUrl} target="_blank">
+                              <ShoppingCart className="mr-2 h-5 w-5" /> WhatsApp'tan Sor
+                            </Link>
+                          </Button>
+                        );
+                      })()}
                     </CardFooter>
                   </Card>
                 );
