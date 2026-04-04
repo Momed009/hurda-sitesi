@@ -83,19 +83,36 @@ export function ServiceForm({ initialData, onSubmit, isSubmitting }: ServiceForm
             <CardDescription>Sitenizde sunulan bir hizmetin detaylarını girin.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <FormField
-                control={form.control}
-                name="title"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Hizmet Adı</FormLabel>
-                    <FormControl>
-                        <Input placeholder="Örn: Demir & Çelik Hurda Alımı" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <FormField
+                  control={form.control}
+                  name="title"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Hizmet Adı</FormLabel>
+                      <FormControl>
+                          <Input placeholder="Örn: Demir & Çelik Hurda Alımı" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+              />
+
+              <FormField
+                  control={form.control}
+                  name="imageIds"
+                  render={({ field }) => (
+                      <FormItem>
+                      <FormLabel>Görsel ID'leri</FormLabel>
+                      <FormControl>
+                          <Input placeholder="gorsel-1, gorsel-2, gorsel-3" {...field} />
+                      </FormControl>
+                      <FormDescription>Virgülle ayırın (örn: gorsel-1, gorsel-2)</FormDescription>
+                      <FormMessage />
+                      </FormItem>
+                  )}
+              />
+            </div>
             
             <FormField
                 control={form.control}
@@ -110,36 +127,23 @@ export function ServiceForm({ initialData, onSubmit, isSubmitting }: ServiceForm
                     </FormItem>
                 )}
             />
-            
-            <FormField
-                control={form.control}
-                name="imageIds"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Görsel ID'leri</FormLabel>
-                    <FormControl>
-                        <Input placeholder="gorsel-1, gorsel-2, gorsel-3" {...field} />
-                    </FormControl>
-                    <FormDescription>Görsel Yönetimi sayfasından ID'leri kopyalayın. Birden fazla görsel için virgülle ayırın.</FormDescription>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
 
-            <FormField
-                control={form.control}
-                name="displayOrder"
-                render={({ field }) => (
-                    <FormItem>
-                    <FormLabel>Görüntülenme Sırası</FormLabel>
-                    <FormControl>
-                        <Input type="number" placeholder="0" {...field} />
-                    </FormControl>
-                     <FormDescription>En önemli hizmetlerinizi üste taşımak için küçük bir numara verin (örn: 1, 10, 20). Hizmetler bu numaraya göre küçükten büyüğe sıralanır.</FormDescription>
-                    <FormMessage />
-                    </FormItem>
-                )}
-            />
+            <div className="w-full md:w-1/2">
+                <FormField
+                    control={form.control}
+                    name="displayOrder"
+                    render={({ field }) => (
+                        <FormItem>
+                        <FormLabel>Görüntülenme Sırası</FormLabel>
+                        <FormControl>
+                            <Input type="number" placeholder="0" {...field} />
+                        </FormControl>
+                        <FormDescription>Küçükten büyüğe sıralanır (örn: 1, 10, 20).</FormDescription>
+                        <FormMessage />
+                        </FormItem>
+                    )}
+                />
+            </div>
           </CardContent>
         </Card>
         <div className="flex gap-2">
