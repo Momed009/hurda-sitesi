@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { MediaPicker } from '@/components/media-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -126,12 +127,18 @@ export default function CompanyInfoPage() {
                         name="ownerImageId"
                         render={({ field }) => (
                             <FormItem>
-                                <FormLabel>Firma Sahibi Görsel ID</FormLabel>
-                                <FormControl>
-                                    <Input placeholder="gorsel-id-123" {...field} value={field.value ?? ''} />
-                                </FormControl>
-                                <FormDescription>Görsel Yönetimi'nden ID kopyalayın.</FormDescription>
-                                <FormMessage />
+                            <FormLabel className="flex items-center justify-between">
+                                Sahip Görsel ID
+                                <MediaPicker 
+                                    onSelect={(id) => field.onChange(id)} 
+                                    currentValue={field.value}
+                                />
+                            </FormLabel>
+                            <FormControl>
+                                <Input placeholder="sahip-gorsel-id" {...field} value={field.value ?? ''} />
+                            </FormControl>
+                            <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
+                            <FormMessage />
                             </FormItem>
                         )}
                     />

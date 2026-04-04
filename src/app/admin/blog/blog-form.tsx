@@ -21,7 +21,8 @@ import {
 } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Plus, X } from 'lucide-react';
+import { MediaPicker } from '@/components/media-picker';
 import { useEffect } from 'react';
 
 const formSchema = z.object({
@@ -188,12 +189,18 @@ export function BlogForm({ initialData, onSubmit, isSubmitting }: BlogFormProps)
                             name="thumbnailImageId"
                             render={({ field }) => (
                                 <FormItem>
-                                    <FormLabel>Öne Çıkan Görsel ID</FormLabel>
-                                    <FormControl>
-                                        <Input placeholder="gorsel-id-123" {...field} />
-                                    </FormControl>
-                                     <FormDescription>Görsel Yönetimi sayfasından bir ID kopyalayıp buraya yapıştırın.</FormDescription>
-                                    <FormMessage />
+                                <FormLabel className="flex items-center justify-between">
+                                    Öne Çıkan Görsel ID
+                                    <MediaPicker 
+                                        onSelect={(id) => field.onChange(id)} 
+                                        currentValue={field.value}
+                                    />
+                                </FormLabel>
+                                <FormControl>
+                                    <Input placeholder="gorsel-id-123" {...field} />
+                                </FormControl>
+                                <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
+                                <FormMessage />
                                 </FormItem>
                             )}
                         />

@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2 } from 'lucide-react';
+import { MediaPicker } from '@/components/media-picker';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -183,7 +184,20 @@ export default function SiteSettingsPage() {
                             <FormItem><FormLabel>Ana Alt Başlık (Paragraf)</FormLabel><Textarea placeholder="Antalya ve Kepez'de demir, bakır..." {...field} value={field.value ?? ''} /><FormMessage /></FormItem>
                         )} />
                         <FormField control={form.control} name="homepageHeroImageId" render={({ field }) => (
-                            <FormItem><FormLabel>Ana Bölüm Arkaplan Görsel ID</FormLabel><Input placeholder="gorsel-id-123" {...field} value={field.value ?? ''} /><FormDescription>Görsel Yönetimi'nden kopyaladığınız ID'yi yapıştırın.</FormDescription><FormMessage /></FormItem>
+                          <FormItem>
+                            <FormLabel className="flex items-center justify-between">
+                              Ana Bölüm Arkaplan Görsel ID
+                              <MediaPicker 
+                                onSelect={(id) => field.onChange(id)} 
+                                currentValue={field.value}
+                              />
+                            </FormLabel>
+                            <FormControl>
+                              <Input placeholder="gorsel-id-123" {...field} value={field.value ?? ''} />
+                            </FormControl>
+                            <FormDescription>Görsel Yönetimi'nden kopyaladığınız ID'yi yapıştırın.</FormDescription>
+                            <FormMessage />
+                          </FormItem>
                         )} />
                     </CardContent>
                 </Card>
@@ -235,13 +249,41 @@ export default function SiteSettingsPage() {
                          <hr className="my-4" />
                         <FormField control={form.control} name="servicesIndustrialTitle" render={({ field }) => (<FormItem><FormLabel>Sanayi Bölümü Başlığı</FormLabel><Input {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="servicesIndustrialText" render={({ field }) => (<FormItem><FormLabel>Sanayi Bölümü Metni</FormLabel><Textarea {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
-                        <FormField control={form.control} name="servicesIndustrialImageId" render={({ field }) => (<FormItem><FormLabel>Sanayi Bölümü Görsel ID</FormLabel><Input {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="servicesIndustrialImageId" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="flex items-center justify-between">
+                              Sanayi Bölümü Görsel ID
+                              <MediaPicker 
+                                onSelect={(id) => field.onChange(id)} 
+                                currentValue={field.value}
+                              />
+                            </FormLabel>
+                            <FormControl>
+                                <Input {...field} value={field.value ?? ''} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
                          <hr className="my-4" />
                         <FormField control={form.control} name="servicesElectronicsTitle" render={({ field }) => (<FormItem><FormLabel>Elektronik Bölümü Başlığı</FormLabel><Input {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="servicesElectronicsText" render={({ field }) => (<FormItem><FormLabel>Elektronik Bölümü Metni</FormLabel><Textarea {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="servicesElectronicsSubtitle" render={({ field }) => (<FormItem><FormLabel>Elektronik Alt Başlık</FormLabel><Input {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="servicesElectronicsSubtext" render={({ field }) => (<FormItem><FormLabel>Elektronik Alt Metin</FormLabel><Textarea {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
-                        <FormField control={form.control} name="servicesElectronicsImageId" render={({ field }) => (<FormItem><FormLabel>Elektronik Bölümü Görsel ID</FormLabel><Input {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
+                        <FormField control={form.control} name="servicesElectronicsImageId" render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className="flex items-center justify-between">
+                                Elektronik Bölümü Görsel ID
+                                <MediaPicker 
+                                    onSelect={(id) => field.onChange(id)} 
+                                    currentValue={field.value}
+                                />
+                            </FormLabel>
+                            <FormControl>
+                                <Input {...field} value={field.value ?? ''} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )} />
                          <hr className="my-4" />
                         <FormField control={form.control} name="servicesWholesaleTitle" render={({ field }) => (<FormItem><FormLabel>Toptan Alım Bölümü Başlığı</FormLabel><Input {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />
                         <FormField control={form.control} name="servicesWholesaleText" render={({ field }) => (<FormItem><FormLabel>Toptan Alım Bölümü Metni</FormLabel><Textarea {...field} value={field.value ?? ''} /><FormMessage /></FormItem>)} />

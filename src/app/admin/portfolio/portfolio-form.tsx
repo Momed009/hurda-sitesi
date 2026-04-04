@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/form';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
+import { MediaPicker } from '@/components/media-picker';
 import { useEffect } from 'react';
 
 const formSchema = z.object({
@@ -96,11 +97,17 @@ export function PortfolioForm({ initialData, onSubmit, isSubmitting }: Portfolio
                 name="imageId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Görsel ID</FormLabel>
+                    <FormLabel className="flex items-center justify-between">
+                      Görsel ID
+                      <MediaPicker 
+                        onSelect={(id) => field.onChange(id)} 
+                        currentValue={field.value}
+                      />
+                    </FormLabel>
                     <FormControl>
-                      <Input placeholder="gorsel-id-123" {...field} />
+                      <Input placeholder="gorsel-kimligi" {...field} />
                     </FormControl>
-                    <FormDescription>Görsel Yönetimi sayfasından bir ID kopyalayın.</FormDescription>
+                    <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

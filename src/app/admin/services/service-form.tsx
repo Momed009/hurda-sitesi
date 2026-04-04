@@ -21,6 +21,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 import { useEffect } from 'react';
+import { MediaPicker } from '@/components/media-picker';
 
 const formSchema = z.object({
   title: z.string().min(3, { message: 'Hizmet adı en az 3 karakter olmalıdır.' }),
@@ -103,7 +104,19 @@ export function ServiceForm({ initialData, onSubmit, isSubmitting }: ServiceForm
                   name="imageIds"
                   render={({ field }) => (
                       <FormItem>
-                      <FormLabel>Görsel ID'leri</FormLabel>
+                      <FormLabel className="flex items-center justify-between">
+                        Görsel ID'leri
+                        <MediaPicker 
+                          onSelect={(id) => {
+                            const current = field.value || '';
+                            const ids = current.split(',').map(v => v.trim()).filter(Boolean);
+                            if (!ids.includes(id)) {
+                                ids.push(id);
+                                field.onChange(ids.join(', '));
+                            }
+                          }}
+                        />
+                      </FormLabel>
                       <FormControl>
                           <Input placeholder="gorsel-1, gorsel-2, gorsel-3" {...field} />
                       </FormControl>
