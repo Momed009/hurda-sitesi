@@ -68,25 +68,19 @@ export default function AdminBlogPage() {
     const postToDeleteId = postToDelete.id;
     const postToDeleteTitle = postToDelete.title;
     
-    // 1. Optimistic UI Update: Remove the post from the local state immediately.
-    setDisplayedPosts((currentPosts) =>
-      currentPosts ? currentPosts.filter((post) => post.id !== postToDeleteId) : []
-    );
-
-    // 2. Close the dialog immediately.
+    // 1. Close the dialog FIRST
     setPostToDelete(null);
 
-    // 3. Perform the actual deletion in the background.
-    const docRef = doc(firestore, 'blogs', postToDeleteId);
-    deleteDocumentNonBlocking(docRef).then(() => {
-      toast({
-        title: 'Yazı Silindi',
-        description: `"${postToDeleteTitle}" başarıyla silindi.`,
+    // 2. Wait for Radix UI dialog unmount animation to finish before DOM is mutated
+    setTimeout(() => {
+      const docRef = doc(firestore, 'blogs', postToDeleteId);
+      deleteDocumentNonBlocking(docRef).then(() => {
+        toast({
+          title: 'Yazı Silindi',
+          description: `"${postToDeleteTitle}" başarıyla silindi.`,
+        });
       });
-    }).catch(() => {
-      // If deletion fails, the live hook will eventually bring the post back.
-      // A toast could be added here to inform the user about the failure.
-    });
+    }, 300);
   };
   
   const handleGeneratePosts = async () => {

@@ -45,19 +45,19 @@ export default function AdminPortfolioPage() {
     const itemId = itemToDelete.id;
     const itemTitle = itemToDelete.title;
 
-    setDisplayedItems((current) =>
-      current ? current.filter((item) => item.id !== itemId) : []
-    );
-
+    // 1. Close the dialog FIRST
     setItemToDelete(null);
 
-    const docRef = doc(firestore, 'portfolio', itemId);
-    deleteDocumentNonBlocking(docRef).then(() => {
-      toast({
-        title: 'İş Silindi',
-        description: `"${itemTitle}" başarıyla silindi.`,
+    // 2. Wait for Radix UI dialog unmount animation to finish before DOM is mutated
+    setTimeout(() => {
+      const docRef = doc(firestore, 'portfolio', itemId);
+      deleteDocumentNonBlocking(docRef).then(() => {
+        toast({
+          title: 'İş Silindi',
+          description: `"${itemTitle}" başarıyla silindi.`,
+        });
       });
-    });
+    }, 300);
   };
 
   return (

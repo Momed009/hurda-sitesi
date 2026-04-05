@@ -64,19 +64,18 @@ export default function AdminImagesPage() {
 
     const imageId = imageToDelete.id;
     
-    // 1. Optimistic UI Update
-    setDisplayedImages((currentImages) =>
-      currentImages ? currentImages.filter((img) => img.id !== imageId) : []
-    );
-    
-    // 2. Close the dialog
+    // 1. Close the dialog FIRST
     setImageToDelete(null);
 
-    // 3. Perform deletion in background
-    const docRef = doc(firestore, 'images', imageId);
-    deleteDocumentNonBlocking(docRef).then(() => {
-      toast({ title: 'Görsel Silindi', description: `Görsel başarıyla silindi.` });
-    });
+    // 2. Wait for Radix UI dialog unmount animation to finish before DOM is mutated
+    // This perfectly prevents the pointer-events UI freeze bug.
+    setTimeout(() => {
+      // 3. Perform deletion in background
+      const docRef = doc(firestore, 'images', imageId);
+      deleteDocumentNonBlocking(docRef).then(() => {
+        toast({ title: 'Görsel Silindi', description: `Görsel başarıyla silindi.` });
+      });
+    }, 300);
   };
 
   const copyToClipboard = (text: string) => {

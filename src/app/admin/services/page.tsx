@@ -65,19 +65,19 @@ export default function AdminServicesPage() {
     const serviceId = serviceToDelete.id;
     const serviceTitle = serviceToDelete.title;
 
-    setDisplayedServices((currentServices) =>
-      currentServices ? currentServices.filter((service) => service.id !== serviceId) : []
-    );
-
+    // 1. Close the dialog FIRST
     setServiceToDelete(null);
 
-    const docRef = doc(firestore, 'services', serviceId);
-    deleteDocumentNonBlocking(docRef).then(() => {
-      toast({
-        title: 'Hizmet Silindi',
-        description: `"${serviceTitle}" başarıyla silindi.`,
+    // 2. Wait for Radix UI dialog unmount animation to finish before DOM is mutated
+    setTimeout(() => {
+      const docRef = doc(firestore, 'services', serviceId);
+      deleteDocumentNonBlocking(docRef).then(() => {
+        toast({
+          title: 'Hizmet Silindi',
+          description: `"${serviceTitle}" başarıyla silindi.`,
+        });
       });
-    });
+    }, 300);
   };
 
   return (

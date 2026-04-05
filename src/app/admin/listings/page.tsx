@@ -66,25 +66,19 @@ export default function AdminListingsPage() {
     const productId = productToDelete.id;
     const productTitle = productToDelete.name;
 
-    // Optimistic UI Update
-    setDisplayedProducts((currentProducts) =>
-      currentProducts ? currentProducts.filter((product) => product.id !== productId) : []
-    );
-
-    // Close the dialog
+    // 1. Close the dialog FIRST
     setProductToDelete(null);
 
-    // Perform deletion in background
-    const docRef = doc(firestore, 'products', productId);
-    deleteDocumentNonBlocking(docRef).then(() => {
-      toast({
-        title: 'İlan Silindi',
-        description: `"${productTitle}" başarıyla silindi.`,
+    // 2. Wait for Radix UI dialog unmount animation to finish before DOM is mutated
+    setTimeout(() => {
+      const docRef = doc(firestore, 'products', productId);
+      deleteDocumentNonBlocking(docRef).then(() => {
+        toast({
+          title: 'İlan Silindi',
+          description: `"${productTitle}" başarıyla silindi.`,
+        });
       });
-    }).catch(() => {
-      // If deletion fails, the hook will eventually bring it back.
-      // You can add a toast to inform about the failure if needed.
-    });
+    }, 300);
   };
 
   return (
