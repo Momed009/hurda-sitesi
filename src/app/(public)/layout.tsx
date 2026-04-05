@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import Header from '@/components/layout/header';
 import Footer from '@/components/layout/footer';
 import WhatsAppButton from '@/components/whatsapp-button';
+import PhoneButton from '@/components/phone-button';
 import { useDoc, useCollection } from '@/firebase';
 import type { CompanyInfo, SiteSetting, Service } from '@/lib/types';
 import { doc, collection, query, orderBy } from 'firebase/firestore';
@@ -50,6 +51,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       <main className="flex-1">{children}</main>
       <Footer siteConfig={siteConfig} />
       <WhatsAppButton phoneNumber={siteConfig.whatsappNumber} />
+      <PhoneButton phoneNumber={siteConfig.phone} />
     </div>
   );
 }
