@@ -4,6 +4,13 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 
+export const metadata: Metadata = {
+  icons: {
+    icon: '/logo.jpg',
+    apple: '/logo.jpg',
+  },
+};
+
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-inter',
