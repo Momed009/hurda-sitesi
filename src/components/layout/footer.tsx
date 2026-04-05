@@ -1,6 +1,7 @@
 import type { SiteConfig } from '@/lib/types';
 import Link from 'next/link';
-import { Recycle, Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin } from 'lucide-react';
+import Image from 'next/image';
 
 export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
   const footerServices = siteConfig.services.length > 0
@@ -16,8 +17,15 @@ export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
       <div className="container py-12">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
           <div className="md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 mb-4">
-                <Recycle className="h-8 w-8 text-primary" />
+            <Link href="/" className="flex items-center gap-2 mb-4 group">
+                <div className="relative w-10 h-10 overflow-hidden rounded-full border border-primary/20 bg-white p-0.5 group-hover:scale-110 transition-transform">
+                  <Image 
+                      src="/logo.jpg" 
+                      alt="Temur Hurda Logo" 
+                      fill 
+                      className="object-contain"
+                  />
+                </div>
                 <span className="text-xl font-bold">{siteConfig.siteName}</span>
             </Link>
             <p className="text-sm text-muted-foreground">

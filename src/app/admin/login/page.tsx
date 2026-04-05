@@ -12,7 +12,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Recycle, Loader2, ArrowLeft, ShieldAlert, Timer } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Loader2, ArrowLeft, ShieldAlert, Timer } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useToast } from '@/hooks/use-toast';
 import { useAuth, useUser, useFirestore, setDocumentNonBlocking } from '@/firebase';
@@ -219,7 +221,14 @@ export default function AdminLoginPage() {
   if (isUserLoading || user) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <Recycle className="h-12 w-12 text-primary animate-spin" />
+        <div className="relative w-16 h-16 animate-pulse">
+           <Image 
+              src="/logo.jpg" 
+              alt="Yükleniyor" 
+              fill 
+              className="object-contain rounded-full"
+           />
+        </div>
       </div>
     );
   }
@@ -236,7 +245,19 @@ export default function AdminLoginPage() {
       </div>
       <Card className="mx-auto w-full max-w-sm shadow-lg border-border/50">
         <CardHeader className="text-center pt-8">
-          <Recycle className={`mx-auto h-12 w-12 mb-2 ${isLockedOut ? 'text-destructive' : 'text-primary'}`} />
+          <div className="flex justify-center mb-4">
+             <div className={cn(
+               "relative w-20 h-20 overflow-hidden rounded-full border-2 p-1 bg-white shadow-md transition-colors",
+               isLockedOut ? 'border-destructive/50' : 'border-primary/20'
+             )}>
+                <Image 
+                    src="/logo.jpg" 
+                    alt="Logo" 
+                    fill 
+                    className="object-contain"
+                />
+             </div>
+          </div>
           <CardTitle className="text-2xl">Yönetici Paneli</CardTitle>
           <CardDescription>
             {isLockedOut ? 'Hesap geçici olarak kilitlendi' : 'Devam etmek için giriş yapın'}

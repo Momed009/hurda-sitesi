@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Newspaper, Settings, LogOut, Package, Image as ImageIcon, Info, Wrench, FolderOpen, User, Recycle, Menu } from 'lucide-react';
+import { Home, Newspaper, Settings, LogOut, Package, Image as ImageIcon, Info, Wrench, FolderOpen, User, Menu } from 'lucide-react';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
@@ -45,7 +46,14 @@ function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {
         <div className="flex h-full max-h-screen flex-col gap-2">
             <div className="flex h-14 items-center border-b px-4 lg:h-[60px] lg:px-6">
                 <Link href="/admin" className="flex items-center gap-2 font-semibold">
-                    <Recycle className="h-6 w-6 text-primary" />
+                    <div className="relative w-8 h-8 overflow-hidden rounded-full border border-primary/20 bg-white p-0.5">
+                      <Image 
+                          src="/logo.jpg" 
+                          alt="Logo" 
+                          fill 
+                          className="object-contain"
+                      />
+                    </div>
                     <span>Yönetim Paneli</span>
                 </Link>
             </div>
@@ -118,7 +126,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     if (isUserLoading || !user) {
         return (
             <div className="flex h-screen w-full items-center justify-center bg-background">
-                <Recycle className="h-12 w-12 animate-spin text-primary" />
+                <div className="relative w-20 h-20 animate-pulse">
+                  <Image 
+                      src="/logo.jpg" 
+                      alt="Yükleniyor" 
+                      fill 
+                      className="object-contain rounded-full"
+                  />
+                </div>
             </div>
         );
     }
