@@ -40,6 +40,8 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
     mapUrl: companyInfoData?.mapEmbedUrl ?? '',
     ownerName: companyInfoData?.ownerFullName ?? '',
     services: (servicesData ?? []).map(s => ({ id: s.id, title: s.title })),
+    instagramUrl: companyInfoData?.instagramUrl ?? '',
+    facebookUrl: companyInfoData?.facebookUrl ?? '',
   };
   
   return (

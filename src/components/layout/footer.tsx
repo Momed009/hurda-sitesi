@@ -1,7 +1,8 @@
 import type { SiteConfig } from '@/lib/types';
 import Link from 'next/link';
-import { Phone, Mail, MapPin } from 'lucide-react';
+import { Phone, Mail, MapPin, Instagram, Facebook, MessageCircle } from 'lucide-react';
 import Image from 'next/image';
+import { formatWhatsAppNumber } from '@/lib/utils';
 
 export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
   const footerServices = siteConfig.services.length > 0
@@ -15,7 +16,7 @@ export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
   return (
     <footer className="bg-secondary text-secondary-foreground">
       <div className="container py-12">
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 lg:grid-cols-4">
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4 group">
                 <div className="relative w-10 h-10 overflow-hidden rounded-full border border-primary/20 bg-white p-0.5 group-hover:scale-110 transition-transform">
@@ -77,6 +78,48 @@ export default function Footer({ siteConfig }: { siteConfig: SiteConfig }) {
                 </li>
               )}
             </ul>
+          </div>
+
+          <div className="md:col-span-1">
+            <h3 className="font-semibold mb-4 text-primary">Bize Ulaşın</h3>
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
+                Sosyal medyadan bizi takip edin, güncel ilanlardan haberdar olun.
+            </p>
+            <div className="flex items-center gap-3">
+                {/* WhatsApp */}
+                <Link 
+                    href={`https://wa.me/${formatWhatsAppNumber(siteConfig.whatsappNumber)}`} 
+                    target="_blank" 
+                    className="w-10 h-10 rounded-full bg-[#25D366]/10 flex items-center justify-center text-[#25D366] hover:bg-[#25D366] hover:text-white transition-all duration-300 border border-[#25D366]/20 shadow-sm"
+                    title="WhatsApp"
+                >
+                    <MessageCircle className="w-5 h-5" />
+                </Link>
+
+                {/* Instagram */}
+                {siteConfig.instagramUrl && (
+                    <Link 
+                        href={siteConfig.instagramUrl} 
+                        target="_blank" 
+                        className="w-10 h-10 rounded-full bg-[#E4405F]/10 flex items-center justify-center text-[#E4405F] hover:bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] hover:text-white transition-all duration-300 border border-[#E4405F]/20 shadow-sm"
+                        title="Instagram"
+                    >
+                        <Instagram className="w-5 h-5" />
+                    </Link>
+                )}
+
+                {/* Facebook */}
+                {siteConfig.facebookUrl && (
+                    <Link 
+                        href={siteConfig.facebookUrl} 
+                        target="_blank" 
+                        className="w-10 h-10 rounded-full bg-[#1877F2]/10 flex items-center justify-center text-[#1877F2] hover:bg-[#1877F2] hover:text-white transition-all duration-300 border border-[#1877F2]/20 shadow-sm"
+                        title="Facebook"
+                    >
+                        <Facebook className="w-5 h-5" />
+                    </Link>
+                )}
+            </div>
           </div>
         </div>
 

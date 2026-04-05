@@ -132,5 +132,7 @@ export interface SiteConfig {
     mapUrl: string;
     ownerName: string;
     services: { id: string; title: string }[];
+    instagramUrl?: string;
+    facebookUrl?: string;
   }
     
