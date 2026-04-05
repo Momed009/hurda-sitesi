@@ -1,15 +1,13 @@
 'use client';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Home, Newspaper, Settings, LogOut, Package, Image as ImageIcon, Info, Wrench, FolderOpen } from 'lucide-react';
+import { Home, Newspaper, Settings, LogOut, Package, Image as ImageIcon, Info, Wrench, FolderOpen, User, Recycle, Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAuth, useUser } from '@/firebase';
 import { signOut } from 'firebase/auth';
 import { useToast } from '@/hooks/use-toast';
 import { useEffect, useState } from 'react';
-import { Recycle } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from '@/components/ui/sheet';
-import { Menu } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const navItems = [
@@ -21,6 +19,7 @@ const navItems = [
   { href: '/admin/images', label: 'Görsel Yönetimi', icon: ImageIcon },
   { href: '/admin/company-info', label: 'Firma Bilgileri', icon: Info },
   { href: '/admin/site-settings', label: 'Site Ayarları', icon: Settings },
+  { href: '/admin/profile', label: 'Hesap Ayarları', icon: User },
 ];
 
 function NavContent({ onLinkClick }: { onLinkClick?: () => void }) {

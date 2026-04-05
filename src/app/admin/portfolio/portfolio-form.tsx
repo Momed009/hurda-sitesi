@@ -22,11 +22,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Loader2 } from 'lucide-react';
 import { MediaPicker } from '@/components/media-picker';
 import { useEffect } from 'react';
+import { getImagePath } from '@/lib/utils';
 
 const formSchema = z.object({
   title: z.string().min(3, { message: 'Başlık en az 3 karakter olmalıdır.' }),
   description: z.string().min(10, { message: 'Açıklama en az 10 karakter olmalıdır.' }),
   imageId: z.string().min(3, { message: 'Görsel ID girilmelidir.' }),
+  imageUrl: z.string().optional(),
   displayOrder: z.coerce.number().int().min(0, { message: 'Sıralama 0 veya daha büyük olmalıdır.' }),
 });
 
@@ -47,6 +49,7 @@ export function PortfolioForm({ initialData, onSubmit, isSubmitting }: Portfolio
         title: '',
         description: '',
         imageId: '',
+        imageUrl: '',
         displayOrder: 0,
       };
 
@@ -100,13 +103,28 @@ export function PortfolioForm({ initialData, onSubmit, isSubmitting }: Portfolio
                     <FormLabel className="flex items-center justify-between">
                       Görsel ID
                       <MediaPicker 
-                        onSelect={(id) => field.onChange(id)} 
+                        onSelect={(image) => {
+                            field.onChange(image.id);
+                            form.setValue('imageUrl', image.url);
+                        }} 
                         currentValue={field.value}
                       />
                     </FormLabel>
                     <FormControl>
                       <Input placeholder="gorsel-kimligi" {...field} />
                     </FormControl>
+                    {form.watch('imageUrl') && (
+                        <div className="mt-2 relative w-32 h-32 rounded-lg overflow-hidden border border-border group">
+                            <img 
+                                src={getImagePath(form.watch('imageUrl'))} 
+                                alt="Önizleme" 
+                                className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <p className="text-[10px] text-white font-medium">Önizleme</p>
+                            </div>
+                        </div>
+                    )}
                     <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
                     <FormMessage />
                   </FormItem>

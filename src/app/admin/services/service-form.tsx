@@ -22,11 +22,13 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Loader2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { MediaPicker } from '@/components/media-picker';
+import { getImagePath } from '@/lib/utils';
 
 const formSchema = z.object({
   title: z.string().min(3, { message: 'Hizmet adı en az 3 karakter olmalıdır.' }),
   description: z.string().min(10, { message: 'Açıklama en az 10 karakter olmalıdır.' }),
   imageIds: z.string().min(3, { message: 'En az bir görsel ID girilmelidir.' }),
+  mainImageUrl: z.string().optional(),
   displayOrder: z.coerce.number().int({ message: 'Sıralama bir tam sayı olmalıdır.' }),
 });
 
@@ -45,11 +47,13 @@ export function ServiceForm({ initialData, onSubmit, isSubmitting }: ServiceForm
     ? { 
         ...initialData,
         imageIds: initialData.imageIds.join(', '),
+        mainImageUrl: initialData.mainImageUrl || '',
       }
     : {
         title: '',
         description: '',
         imageIds: '',
+        mainImageUrl: '',
         displayOrder: 0,
       };
 
@@ -62,7 +66,8 @@ export function ServiceForm({ initialData, onSubmit, isSubmitting }: ServiceForm
     if (initialData) {
       form.reset({
         ...initialData,
-        imageIds: initialData.imageIds.join(', ')
+        imageIds: initialData.imageIds.join(', '),
+        mainImageUrl: initialData.mainImageUrl || ''
       });
     }
   }, [initialData, form]);
@@ -107,12 +112,17 @@ export function ServiceForm({ initialData, onSubmit, isSubmitting }: ServiceForm
                       <FormLabel className="flex items-center justify-between">
                         Görsel ID'leri
                         <MediaPicker 
-                          onSelect={(id) => {
+                          onSelect={(image) => {
                             const current = field.value || '';
                             const ids = current.split(',').map(v => v.trim()).filter(Boolean);
-                            if (!ids.includes(id)) {
-                                ids.push(id);
+                            if (!ids.includes(image.id)) {
+                                ids.push(image.id);
                                 field.onChange(ids.join(', '));
+                                
+                                // Set main image URL if not set
+                                if (!form.getValues('mainImageUrl')) {
+                                    form.setValue('mainImageUrl', image.url);
+                                }
                             }
                           }}
                         />
@@ -120,7 +130,19 @@ export function ServiceForm({ initialData, onSubmit, isSubmitting }: ServiceForm
                       <FormControl>
                           <Input placeholder="gorsel-1, gorsel-2, gorsel-3" {...field} />
                       </FormControl>
-                      <FormDescription>Virgülle ayırın (örn: gorsel-1, gorsel-2)</FormDescription>
+                      {form.watch('mainImageUrl') && (
+                          <div className="mt-2 relative w-32 h-32 rounded-lg overflow-hidden border border-border group bg-muted/30">
+                              <img 
+                                src={getImagePath(form.watch('mainImageUrl'))} 
+                                alt="Önizleme" 
+                                className="w-full h-full object-contain transition-all"
+                              />
+                              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                  <p className="text-[10px] text-white font-medium px-2 text-center leading-tight">Önizleme</p>
+                              </div>
+                          </div>
+                      )}
+                      <FormDescription>Virgülle ayırın (örn: gorsel-1, gorsel-2). İlk seçilen resim kapak resmi olur.</FormDescription>
                       <FormMessage />
                       </FormItem>
                   )}

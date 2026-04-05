@@ -26,8 +26,15 @@ export default function ServicesPageClient() {
 
   const isLoading = servicesLoading || imagesLoading || settingsLoading;
   
-  const industrialImage = findImageById(siteSettings?.servicesIndustrialImageId || 'factory-scrap', allImages) ?? getFallbackImage(siteSettings?.servicesIndustrialImageId || 'factory-scrap');
-  const electronicsImage = findImageById(siteSettings?.servicesElectronicsImageId || 'electronics-scrap', allImages) ?? getFallbackImage(siteSettings?.servicesElectronicsImageId || 'electronics-scrap');
+  const industrialImageUrl = siteSettings?.servicesIndustrialImageUrl || '';
+  const industrialImage = industrialImageUrl 
+    ? { url: industrialImageUrl, altText: siteSettings?.servicesIndustrialTitle || 'Sanayi' }
+    : (findImageById(siteSettings?.servicesIndustrialImageId || 'factory-scrap', allImages) ?? getFallbackImage(siteSettings?.servicesIndustrialImageId || 'factory-scrap'));
+
+  const electronicsImageUrl = siteSettings?.servicesElectronicsImageUrl || '';
+  const electronicsImage = electronicsImageUrl 
+    ? { url: electronicsImageUrl, altText: siteSettings?.servicesElectronicsTitle || 'Elektronik' }
+    : (findImageById(siteSettings?.servicesElectronicsImageId || 'electronics-scrap', allImages) ?? getFallbackImage(siteSettings?.servicesElectronicsImageId || 'electronics-scrap'));
 
   return (
     <>
@@ -42,43 +49,74 @@ export default function ServicesPageClient() {
         </div>
       </div>
       
-      <div className='py-16 lg:py-24 bg-card'>
-        <div className="container grid md:grid-cols-2 gap-12 items-center">
-            {isLoading ? <Loader2 className='w-8 h-8 animate-spin' /> : 
-              <div>
-                   <HardHat className="w-12 h-12 text-primary mb-4" />
-                   <h2 className='text-3xl font-bold tracking-tight mb-4'>{siteSettings?.servicesIndustrialTitle || 'Sanayi, Şantiye ve Fabrika Hurdası Çözümleri'}</h2>
-                   <p className='text-muted-foreground leading-relaxed'>
-                      {siteSettings?.servicesIndustrialText || 'İnşaat demiri, çelik konstrüksiyon, makine parçaları ve üretim artığı gibi büyük hacimli endüstriyel hurdalarınızı yerinde söküm ve nakliye hizmetlerimizle değerlendiriyoruz. Proje bazlı özel çözümlerimizle işlerinizi kolaylaştırıyoruz.'}
-                   </p>
-              </div>
-            }
-            <div className="relative h-80 rounded-lg overflow-hidden">
-                <Image src={getImagePath(industrialImage.url)} alt={industrialImage.altText} fill className="object-cover" data-ai-hint="factory industry" />
+      <div className='py-16 lg:py-24 bg-gradient-to-b from-card to-background'>
+        <div className="container px-4 md:px-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-16">
+                {/* Sanayi, Şantiye ve Fabrika Bölümü */}
+                <div className="group flex flex-col space-y-6">
+                     <div className="relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-xl border border-primary/10 bg-muted/20">
+                        <Image 
+                            src={getImagePath(industrialImage.url)} 
+                            alt={industrialImage.altText} 
+                            fill 
+                            className="object-contain transition-transform duration-700 group-hover:scale-105" 
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute bottom-6 left-6 flex items-center gap-3 text-white">
+                            <div className="p-2 bg-primary/20 backdrop-blur-md rounded-lg">
+                                <HardHat className="w-6 h-6 text-primary-foreground" />
+                            </div>
+                            <span className="font-bold text-lg">Fabrika & Sanayi</span>
+                        </div>
+                    </div>
+                    {isLoading ? <Loader2 className='w-8 h-8 animate-spin' /> : 
+                        <div className="space-y-4 pr-0 lg:pr-8">
+                            <h2 className='text-2xl md:text-3xl font-extrabold tracking-tight underline-offset-8 decoration-primary/30 decoration-4 underline'>{siteSettings?.servicesIndustrialTitle || 'Sanayi, Şantiye ve Fabrika Hurdası Çözümleri'}</h2>
+                            <p className='text-muted-foreground leading-relaxed text-lg'>
+                                {siteSettings?.servicesIndustrialText || 'İnşaat demiri, çelik konstrüksiyon, makine parçaları ve üretim artığı gibi büyük hacimli endüstriyel hurdalarınızı yerinde söküm ve nakliye hizmetlerimizle değerlendiriyoruz.'}
+                            </p>
+                        </div>
+                    }
+                </div>
+
+                {/* Elektronik ve Beyaz Eşya Bölümü */}
+                <div className="group flex flex-col space-y-6">
+                    <div className="relative h-64 sm:h-80 rounded-2xl overflow-hidden shadow-xl border border-primary/10 bg-muted/20">
+                        <Image 
+                            src={getImagePath(electronicsImage.url)} 
+                            alt={electronicsImage.altText} 
+                            fill 
+                            className="object-contain transition-transform duration-700 group-hover:scale-105" 
+                            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        <div className="absolute bottom-6 left-6 flex items-center gap-3 text-white">
+                            <div className="p-2 bg-primary/20 backdrop-blur-md rounded-lg">
+                                <Cpu className="w-6 h-6 text-primary-foreground" />
+                            </div>
+                            <span className="font-bold text-lg">Elektronik & E-Atık</span>
+                        </div>
+                    </div>
+                    {isLoading ? <Loader2 className='w-8 h-8 animate-spin' /> : 
+                        <div className="space-y-4 pl-0 lg:pl-8">
+                            <h2 className='text-2xl md:text-3xl font-extrabold tracking-tight underline-offset-8 decoration-primary/30 decoration-4 underline'>{siteSettings?.servicesElectronicsTitle || 'Elektronik ve Beyaz Eşya Geri Dönüşümü'}</h2>
+                            <p className='text-muted-foreground leading-relaxed text-lg'>
+                                {siteSettings?.servicesElectronicsText || 'Ömrünü tamamlamış beyaz eşyalar (buzdolabı, çamaşır makinesi vb.) ve her türlü elektronik kart, kablo, bilgisayar gibi e-atıkları geri dönüşüme kazandırıyoruz.'}
+                            </p>
+                            <div className="pt-2 border-t border-primary/10">
+                                <h3 className="text-xl font-bold mb-2 text-primary">{siteSettings?.servicesElectronicsSubtitle || 'Eski ve Bozuk Beyaz Eşya Alımı'}</h3>
+                                <p className='text-muted-foreground leading-relaxed'>
+                                    {siteSettings?.servicesElectronicsSubtext || 'Bozuk veya eski beyaz eşyalarınızı adresinizden teslim alarak size hem yer açıyor hem de ek gelir sağlıyoruz.'}
+                                </p>
+                            </div>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
       </div>
-       <div className='py-16 lg:py-24'>
-        <div className="container grid md:grid-cols-2 gap-12 items-center">
-             <div className="relative h-80 rounded-lg overflow-hidden md:order-last">
-                <Image src={getImagePath(electronicsImage.url)} alt={electronicsImage.altText} fill className="object-cover" data-ai-hint="electronics waste" />
-            </div>
-            {isLoading ? <Loader2 className='w-8 h-8 animate-spin' /> : 
-              <div>
-                   <Cpu className="w-12 h-12 text-primary mb-4" />
-                   <h2 className='text-3xl font-bold tracking-tight mb-4'>{siteSettings?.servicesElectronicsTitle || 'Elektronik ve Beyaz Eşya Geri Dönüşümü'}</h2>
-                   <p className='text-muted-foreground leading-relaxed'>
-                     {siteSettings?.servicesElectronicsText || 'Ömrünü tamamlamış beyaz eşyalar (buzdolabı, çamaşır makinesi vb.) ve her türlü elektronik kart, kablo, bilgisayar gibi e-atıkları geri dönüşüme kazandırıyoruz.'}
-                   </p>
-                    <h3 className="text-xl font-semibold mt-6 mb-2">{siteSettings?.servicesElectronicsSubtitle || 'Eski ve Bozuk Beyaz Eşya Alımı'}</h3>
-                    <p className='text-muted-foreground leading-relaxed'>
-                      {siteSettings?.servicesElectronicsSubtext || 'Bozuk veya eski beyaz eşyalarınızı adresinizden teslim alarak size hem yer açıyor hem de ek gelir sağlıyoruz.'}
-                    </p>
-              </div>
-            }
-        </div>
-      </div>
-      <div className='py-16 lg:py-24 bg-card'>
+      <div className='py-4 lg:py-6 bg-card border-y border-border/50'>
         <div className="container text-center max-w-4xl mx-auto">
             {isLoading ? <Loader2 className='w-8 h-8 mx-auto animate-spin' /> : <>
               <CheckCircle className="w-12 h-12 text-primary mb-4 mx-auto" />
@@ -101,16 +139,18 @@ export default function ServicesPageClient() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {(services ?? []).map((service) => {
-              // A service might have multiple images, we'll just take the first one.
-              const serviceImage = findImageById(service.imageIds[0], allImages) ?? getFallbackImage(service.imageIds[0]);
+              const serviceImageUrl = service.mainImageUrl;
+              const serviceImage = serviceImageUrl 
+                ? { url: serviceImageUrl, altText: service.title }
+                : (findImageById(service.imageIds[0], allImages) ?? getFallbackImage(service.imageIds[0]));
               return (
                 <Card key={service.id} className="group overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-border/50">
-                  <div className="relative h-56 w-full">
+                  <div className="relative h-56 w-full bg-muted/10">
                     <Image
                       src={getImagePath(serviceImage.url)}
                       alt={serviceImage.altText}
                       fill
-                      className="object-cover transition-transform duration-500 group-hover:scale-105"
+                      className="object-contain transition-transform duration-500 group-hover:scale-105 p-2"
                       sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>

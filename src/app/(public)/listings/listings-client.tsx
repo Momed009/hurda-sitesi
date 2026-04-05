@@ -54,15 +54,18 @@ export default function ListingsPageClient() {
           {products && products.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {products.map((product) => {
-                const productImage = findImageById(product.imageId, allImages) ?? getFallbackImage(product.imageId);
+                const productImageUrl = product.imageUrl;
+                const productImage = productImageUrl 
+                    ? { url: productImageUrl, altText: product.name }
+                    : (findImageById(product.imageId, allImages) ?? getFallbackImage(product.imageId));
                 return (
                   <Card key={product.id} className="group flex flex-col overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-border/50">
-                    <div className="relative h-64 w-full">
+                    <div className="relative h-64 w-full bg-muted/20">
                       <Image
                         src={getImagePath(productImage.url)}
                         alt={productImage.altText}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="object-contain transition-transform duration-500 group-hover:scale-105 p-3"
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                       {product.stock > 0 ? (

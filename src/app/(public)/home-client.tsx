@@ -42,7 +42,10 @@ export default function HomePageClient() {
     return [...featuredPosts].sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime()).slice(0, 3);
   }, [featuredPosts]);
 
-  const heroImage = findImageById(siteSettings?.homepageHeroImageId || 'hero-background', allImages) ?? getFallbackImage(siteSettings?.homepageHeroImageId || 'hero-background');
+  const heroImageUrl = siteSettings?.homepageHeroImageUrl || '';
+  const heroImage = heroImageUrl 
+    ? { url: heroImageUrl, altText: siteSettings?.siteName || 'Hero' }
+    : (findImageById(siteSettings?.homepageHeroImageId || 'hero-background', allImages) ?? getFallbackImage(siteSettings?.homepageHeroImageId || 'hero-background'));
 
   const whyUsItems = useMemo(() => [
     {
@@ -76,9 +79,10 @@ export default function HomePageClient() {
       <section className="relative w-full h-[60vh] min-h-[400px] flex items-center justify-center text-center text-white">
         <Image
           src={getImagePath(heroImage.url)}
-          alt={heroImage.altText}
+          alt={heroImage.altText || ''}
           fill
           priority
+          sizes="100vw"
           className="object-cover"
         />
         <div className="absolute inset-0 bg-black/50" />
@@ -214,7 +218,10 @@ export default function HomePageClient() {
               {sortedFeaturedPosts && sortedFeaturedPosts.length > 0 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {sortedFeaturedPosts.map((post) => {
-                    const postImage = findImageById(post.thumbnailImageId, allImages) ?? getFallbackImage(post.thumbnailImageId);
+                    const postImageUrl = post.thumbnailImageUrl;
+                    const postImage = postImageUrl 
+                        ? { url: postImageUrl, altText: post.title }
+                        : (findImageById(post.thumbnailImageId, allImages) ?? getFallbackImage(post.thumbnailImageId));
                     return (
                       <Card key={post.id} className="group flex flex-col overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-border/50">
                         <div className="overflow-hidden">

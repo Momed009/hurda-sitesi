@@ -15,7 +15,7 @@ import React from 'react';
 
 interface BlogDetailDialogProps {
   post: Blog;
-  postImage: ImageType;
+  postImage: { url: string; altText: string };
   children: React.ReactNode; // This will be the trigger
 }
 

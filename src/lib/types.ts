@@ -4,11 +4,13 @@ export interface SiteSetting {
     id?: string;
     siteName?: string;
     siteLogoImageId?: string;
+    siteLogoImageUrl?: string;
     whatsappPhoneNumber?: string;
     contactEmail?: string;
     homepageHeroTitle?: string;
     homepageHeroSubtitle?: string;
     homepageHeroImageId?: string;
+    homepageHeroImageUrl?: string;
     homepageServicesTitle?: string;
     homepageServicesSubtitle?: string;
     homepageWhyUsTitle?: string;
@@ -24,11 +26,13 @@ export interface SiteSetting {
     servicesIndustrialTitle?: string;
     servicesIndustrialText?: string;
     servicesIndustrialImageId?: string;
+    servicesIndustrialImageUrl?: string;
     servicesElectronicsTitle?: string;
     servicesElectronicsText?: string;
     servicesElectronicsSubtitle?: string;
     servicesElectronicsSubtext?: string;
     servicesElectronicsImageId?: string;
+    servicesElectronicsImageUrl?: string;
     servicesWholesaleTitle?: string;
     servicesWholesaleText?: string;
     listingsPageTitle?: string;
@@ -47,10 +51,17 @@ export interface SiteSetting {
     portfolioPageSubtitle?: string;
 }
 
+export interface AdminSettings {
+    id?: string;
+    adminUsername?: string;
+    adminEmail?: string;
+}
+
 export interface CompanyInfo {
     id?: string;
     ownerFullName?: string;
     ownerImageId?: string;
+    ownerImageUrl?: string;
     contactPhoneNumber?: string;
     companyAddress?: string;
     mapEmbedUrl?: string;
@@ -64,6 +75,7 @@ export interface Service {
     title: string;
     description: string;
     imageIds: string[];
+    mainImageUrl?: string;
     displayOrder: number;
 }
 
@@ -74,6 +86,7 @@ export interface Product {
     price: number;
     stock: number;
     imageId: string;
+    imageUrl?: string;
     createdAt: string; // ISO date string
 }
 
@@ -87,6 +100,7 @@ export interface Blog {
     metaDescription: string;
     keywords: string[];
     thumbnailImageId: string;
+    thumbnailImageUrl?: string;
     isFeaturedOnHomepage: boolean;
 }
 
@@ -104,6 +118,7 @@ export interface Portfolio {
     title: string;
     description: string;
     imageId: string;
+    imageUrl?: string;
     displayOrder: number;
     createdAt: string; // ISO date string
 }

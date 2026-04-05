@@ -39,7 +39,10 @@ export default function BlogPageClient() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {(posts ?? []).map((post) => {
-            const postImage = findImageById(post.thumbnailImageId, allImages) ?? getFallbackImage(post.thumbnailImageId);
+            const postImageUrl = post.thumbnailImageUrl;
+            const postImage = postImageUrl 
+                ? { url: postImageUrl, altText: post.title }
+                : (findImageById(post.thumbnailImageId, allImages) ?? getFallbackImage(post.thumbnailImageId));
             return (
               <Card key={post.id} className="group flex flex-col overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 border-border/50">
                 <div className="overflow-hidden">
@@ -49,6 +52,7 @@ export default function BlogPageClient() {
                     width={600}
                     height={400}
                     className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
                 <CardHeader>

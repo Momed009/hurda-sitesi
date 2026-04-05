@@ -18,7 +18,7 @@ import {
 
 export default function PortfolioPageClient() {
   const firestore = useFirestore();
-  const [selectedItem, setSelectedItem] = useState<{ portfolio: Portfolio; image: ImageType } | null>(null);
+  const [selectedItem, setSelectedItem] = useState<{ portfolio: Portfolio; image: { url: string; altText: string } } | null>(null);
 
   const portfolioQuery = useMemoFirebase(() => {
     if (!firestore) return null;
@@ -65,7 +65,10 @@ export default function PortfolioPageClient() {
             {portfolioItems && portfolioItems.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {portfolioItems.map((item) => {
-                  const itemImage = findImageById(item.imageId, allImages) ?? getFallbackImage(item.imageId);
+                  const itemImageUrl = item.imageUrl;
+                  const itemImage = itemImageUrl 
+                    ? { url: itemImageUrl, altText: item.title }
+                    : (findImageById(item.imageId, allImages) ?? getFallbackImage(item.imageId));
                   return (
                     <Card
                       key={item.id}

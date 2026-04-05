@@ -16,10 +16,12 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import { getImagePath } from '@/lib/utils';
 
 const formSchema = z.object({
   ownerFullName: z.string().min(3, { message: 'Firma sahibi adı en az 3 karakter olmalıdır.' }),
   ownerImageId: z.string().min(3, { message: "Görsel ID'si zorunludur." }),
+  ownerImageUrl: z.string().optional().or(z.literal('')),
   contactPhoneNumber: z.string().min(10, { message: 'Telefon numarası en az 10 karakter olmalıdır.' }),
   companyAddress: z.string().min(10, { message: 'Adres en az 10 karakter olmalıdır.' }),
   mapEmbedUrl: z.string().url({ message: 'Lütfen geçerli bir URL girin.' }).min(10, { message: 'Harita URL\'si zorunludur.' }),
@@ -48,6 +50,7 @@ export default function CompanyInfoPage() {
     defaultValues: {
         ownerFullName: '',
         ownerImageId: '',
+        ownerImageUrl: '',
         contactPhoneNumber: '',
         companyAddress: '',
         mapEmbedUrl: '',
@@ -130,13 +133,25 @@ export default function CompanyInfoPage() {
                             <FormLabel className="flex items-center justify-between">
                                 Sahip Görsel ID
                                 <MediaPicker 
-                                    onSelect={(id) => field.onChange(id)} 
+                                    onSelect={(image) => {
+                                        field.onChange(image.id);
+                                        form.setValue('ownerImageUrl', image.url);
+                                    }} 
                                     currentValue={field.value}
                                 />
                             </FormLabel>
                             <FormControl>
                                 <Input placeholder="sahip-gorsel-id" {...field} value={field.value ?? ''} />
                             </FormControl>
+                            {form.watch('ownerImageUrl') && (
+                                <div className="mt-2 relative w-32 h-32 rounded-full overflow-hidden border border-border group">
+                                    <img 
+                                        src={getImagePath(form.watch('ownerImageUrl'))} 
+                                        alt="Sahip Önizleme" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+                            )}
                             <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
                             <FormMessage />
                             </FormItem>

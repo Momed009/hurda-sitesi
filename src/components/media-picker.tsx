@@ -17,7 +17,7 @@ import type { Image as ImageType } from '@/lib/types';
 import { Input } from '@/components/ui/input';
 
 interface MediaPickerProps {
-  onSelect: (id: string) => void;
+  onSelect: (image: ImageType) => void;
   currentValue?: string;
 }
 
@@ -39,8 +39,8 @@ export function MediaPicker({ onSelect, currentValue }: MediaPickerProps) {
     img.url?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleSelect = (id: string) => {
-    onSelect(id);
+  const handleSelect = (image: ImageType) => {
+    onSelect(image);
     setIsOpen(false);
   };
 
@@ -80,7 +80,7 @@ export function MediaPicker({ onSelect, currentValue }: MediaPickerProps) {
             {filteredImages.map((img) => (
               <div 
                 key={img.id}
-                onClick={() => handleSelect(img.id)}
+                onClick={() => handleSelect(img)}
                 className={`group relative aspect-square cursor-pointer overflow-hidden rounded-xl border-2 transition-all hover:ring-2 hover:ring-primary ${
                   currentValue === img.id ? 'border-primary ring-2 ring-primary/30' : 'border-transparent bg-muted/50'
                 }`}
@@ -88,7 +88,7 @@ export function MediaPicker({ onSelect, currentValue }: MediaPickerProps) {
                 <img
                   src={getImagePath(img.url)}
                   alt={img.altText}
-                  className="object-cover w-full h-full transition-transform group-hover:scale-105"
+                  className="object-contain w-full h-full transition-transform group-hover:scale-105"
                 />
                 
                 {currentValue === img.id && (

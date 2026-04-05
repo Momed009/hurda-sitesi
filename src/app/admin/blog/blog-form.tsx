@@ -24,6 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { Loader2, Plus, X } from 'lucide-react';
 import { MediaPicker } from '@/components/media-picker';
 import { useEffect } from 'react';
+import { getImagePath } from '@/lib/utils';
 
 const formSchema = z.object({
   title: z.string().min(5, { message: 'Başlık en az 5 karakter olmalıdır.' }),
@@ -32,6 +33,7 @@ const formSchema = z.object({
   metaDescription: z.string().min(10, { message: 'Meta açıklama en az 10 karakter olmalıdır.' }).max(160, { message: 'Meta açıklama en fazla 160 karakter olabilir.' }),
   keywords: z.string().min(3, { message: 'En az bir anahtar kelime girin.' }),
   thumbnailImageId: z.string().min(3, { message: 'Görsel ID girilmelidir.' }),
+  thumbnailImageUrl: z.string().optional(),
   isFeaturedOnHomepage: z.boolean().default(false),
 });
 
@@ -70,6 +72,7 @@ export function BlogForm({ initialData, onSubmit, isSubmitting }: BlogFormProps)
         metaDescription: '',
         keywords: '',
         thumbnailImageId: '', // Default placeholder
+        thumbnailImageUrl: '',
         isFeaturedOnHomepage: false,
       };
 
@@ -192,13 +195,28 @@ export function BlogForm({ initialData, onSubmit, isSubmitting }: BlogFormProps)
                                 <FormLabel className="flex items-center justify-between">
                                     Öne Çıkan Görsel ID
                                     <MediaPicker 
-                                        onSelect={(id) => field.onChange(id)} 
+                                        onSelect={(image) => {
+                                            field.onChange(image.id);
+                                            form.setValue('thumbnailImageUrl', image.url);
+                                        }} 
                                         currentValue={field.value}
                                     />
                                 </FormLabel>
                                 <FormControl>
                                     <Input placeholder="gorsel-id-123" {...field} />
                                 </FormControl>
+                                {form.watch('thumbnailImageUrl') && (
+                                    <div className="mt-2 relative w-full h-40 rounded-lg overflow-hidden border border-border group">
+                                        <img 
+                                            src={getImagePath(form.watch('thumbnailImageUrl'))} 
+                                            alt="Önizleme" 
+                                            className="w-full h-full object-cover"
+                                        />
+                                        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                            <p className="text-xs text-white font-medium">Öne Çıkan Görsel Önizlemesi</p>
+                                        </div>
+                                    </div>
+                                )}
                                 <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
                                 <FormMessage />
                                 </FormItem>

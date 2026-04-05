@@ -23,7 +23,10 @@ export default function AboutPageClient() {
   const { data: siteSettings, isLoading: settingsLoading } = useDoc<SiteSetting>(siteSettingsRef);
   const { data: allImages, isLoading: imagesLoading } = useCollection<ImageType>(imagesQuery);
   
-  const ownerImage = (companyInfo?.ownerImageId ? findImageById(companyInfo.ownerImageId, allImages) : null) ?? getFallbackImage(companyInfo?.ownerImageId || 'about-us-owner');
+  const ownerImageUrl = companyInfo?.ownerImageUrl || '';
+  const ownerImage = ownerImageUrl 
+    ? { url: ownerImageUrl, altText: companyInfo?.ownerFullName || 'İşletme Sahibi' }
+    : (companyInfo?.ownerImageId ? findImageById(companyInfo.ownerImageId, allImages) : null) ?? getFallbackImage(companyInfo?.ownerImageId || 'about-us-owner');
   const whatsappUrl = `https://wa.me/${formatWhatsAppNumber(siteSettings?.whatsappPhoneNumber ?? '')}?text=Merhaba,%20hurda%20fiyatları%20hakkında%20bilgi%20almak%20istiyorum.`;
 
   const isLoading = infoLoading || imagesLoading || settingsLoading;

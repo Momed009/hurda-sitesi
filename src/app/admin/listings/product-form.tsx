@@ -22,6 +22,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Loader2 } from 'lucide-react';
 import { MediaPicker } from '@/components/media-picker';
 import { useEffect } from 'react';
+import { getImagePath } from '@/lib/utils';
 
 const formSchema = z.object({
   name: z.string().min(3, { message: 'Ürün adı en az 3 karakter olmalıdır.' }),
@@ -29,6 +30,7 @@ const formSchema = z.object({
   price: z.coerce.number().positive({ message: 'Fiyat 0\'dan büyük olmalıdır.' }),
   stock: z.coerce.number().int().min(0, { message: 'Stok negatif olamaz.' }),
   imageId: z.string().min(3, { message: 'Görsel ID girilmelidir.' }),
+  imageUrl: z.string().optional(),
 });
 
 type ProductFormValues = z.infer<typeof formSchema>;
@@ -50,6 +52,7 @@ export function ProductForm({ initialData, onSubmit, isSubmitting }: ProductForm
         price: 0,
         stock: 0,
         imageId: '',
+        imageUrl: '',
       };
 
   const form = useForm<ProductFormValues>({
@@ -99,20 +102,35 @@ export function ProductForm({ initialData, onSubmit, isSubmitting }: ProductForm
                     name="imageId"
                     render={({ field }) => (
                         <FormItem>
-                        <FormLabel className="flex items-center justify-between">
-                            Görsel ID
-                            <MediaPicker 
-                                onSelect={(id) => field.onChange(id)} 
-                                currentValue={field.value}
-                            />
-                        </FormLabel>
-                        <FormControl>
-                            <Input placeholder="gorsel-kimligi" {...field} />
-                        </FormControl>
-                        <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
-                        <FormMessage />
-                        </FormItem>
-                    )}
+                         <FormLabel className="flex items-center justify-between">
+                             Görsel ID
+                             <MediaPicker 
+                                 onSelect={(image) => {
+                                     field.onChange(image.id);
+                                     form.setValue('imageUrl', image.url);
+                                 }} 
+                                 currentValue={field.value}
+                             />
+                         </FormLabel>
+                         <FormControl>
+                             <Input placeholder="gorsel-kimligi" {...field} />
+                         </FormControl>
+                         {form.watch('imageUrl') && (
+                             <div className="mt-2 relative w-32 h-32 rounded-lg overflow-hidden border border-border group bg-muted/40">
+                                 <img 
+                                     src={getImagePath(form.watch('imageUrl') || '')} 
+                                     alt="Önizleme" 
+                                     className="w-full h-full object-contain transition-all"
+                                 />
+                                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                     <p className="text-[10px] text-white font-medium">Tam Görünüm</p>
+                                 </div>
+                             </div>
+                         )}
+                         <FormDescription>Görsel Yönetimi'nden ID seçin.</FormDescription>
+                         <FormMessage />
+                         </FormItem>
+                     )}
                 />
             </div>
             
